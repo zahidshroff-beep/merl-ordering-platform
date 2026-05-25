@@ -7,6 +7,7 @@ Branded for Altamont Group. Built from the client's perspective: clarity, conven
 import streamlit as st
 from datetime import datetime
 import random
+import html
 
 # ============================================================================
 # CONFIGURATION - All client-facing content and pricing in one place
@@ -233,6 +234,7 @@ def validate_order(base_package, details, selected_addons):
     if "@" not in email or "." not in email.split("@")[-1]:
         return False, "Please enter a valid work email address (e.g. you@yourorganization.org)."
     return True, None
+
 
 def capture_proposal_snapshot():
     base = st.session_state.base_package
@@ -670,7 +672,7 @@ def inject_custom_css():
     /* Sidebar total — executive, clean, trustworthy */
     .sidebar-total {{
         background: linear-gradient(155deg, var(--navy) 0%, #0a1322 100%);
-        color: white;
+        color: white !important;
         padding: 21px 24px 19px;
         border-radius: 18px;
         text-align: center;
@@ -684,6 +686,7 @@ def inject_custom_css():
         text-transform: uppercase;
         letter-spacing: 1.6px;
         font-weight: 600;
+        color: white !important;
     }}
     .sidebar-total .amount {{
         font-size: 2.36rem;
@@ -691,6 +694,10 @@ def inject_custom_css():
         line-height: 1.0;
         margin-top: 3px;
         letter-spacing: -0.78px;
+        color: white !important;
+    }}
+    .sidebar-total > div:last-child {{
+        color: rgba(255,255,255,0.78) !important;
     }}
 
     /* Proposal screen — high-end client document quality */
@@ -1240,7 +1247,6 @@ def render_proposal_screen():
         return
 
     proposal_text = generate_proposal_text(data)
-    safe_text = proposal_text.replace("\\", "\\\\").replace("`", "\\`").replace("$", "\\$")
 
     # Gentle confirmation banner when arriving at the summary (improves perceived completion)
     st.success("Proposal generated successfully. Review the details below, then copy or download to send to Altamont Group.")
@@ -1300,6 +1306,15 @@ def render_proposal_screen():
         unsafe_allow_html=True,
     )
 
+    # Hidden source element holding the clean proposal text.
+    # This enables a robust copy button that never embeds user content in JS attributes,
+    # preventing any HTML/JS leakage into the page even if proposal text contains quotes,
+    # backticks, $, newlines, or other special characters.
+    st.markdown(
+        f'<div id="proposal-text-source" style="display:none; white-space:pre;">{html.escape(proposal_text)}</div>',
+        unsafe_allow_html=True,
+    )
+
     # Three action buttons — primary copy dominates, others secondary but clear
     col_copy, col_dl, col_back = st.columns([2.15, 1.3, 1.2], gap="medium")
 
@@ -1307,16 +1322,25 @@ def render_proposal_screen():
         st.markdown(
             f"""
             <button onclick="
-                const txt = `{safe_text}`;
-                navigator.clipboard.writeText(txt).then(() => {{
-                    const b = this;
-                    const orig = b.innerHTML;
-                    b.innerHTML = '✓ Copied — now email to zs@altamontgroup.ca';
-                    b.style.background = '#14532d';
-                    setTimeout(() => {{ b.innerHTML = orig; b.style.background = 'linear-gradient(155deg, #166534 0%, #14532d 100%)'; }}, 3200);
-                }}).catch(() => {{
-                    alert('Copy failed. Please select the full text below and press Ctrl/Cmd + C.');
-                }});
+                (function(btn){{
+                    const src = document.getElementById('proposal-text-source');
+                    const txt = src ? (src.textContent || src.innerText || '') : '';
+                    if (!txt) {{
+                        alert('Nothing to copy.');
+                        return;
+                    }}
+                    navigator.clipboard.writeText(txt).then(() => {{
+                        const orig = btn.innerHTML;
+                        btn.innerHTML = '✓ Copied — now email to zs@altamontgroup.ca';
+                        btn.style.background = '#14532d';
+                        setTimeout(() => {{
+                            btn.innerHTML = orig;
+                            btn.style.background = 'linear-gradient(155deg, #166534 0%, #14532d 100%)';
+                        }}, 3200);
+                    }}).catch(() => {{
+                        alert('Copy failed. Please select the full text below and press Ctrl/Cmd + C.');
+                    }});
+                }})(this);
             " style="
                 width: 100%;
                 background: linear-gradient(155deg, #166534 0%, #14532d 100%);
@@ -1399,13 +1423,13 @@ def render_proposal_screen():
 
         scope_bits = []
         if d.get("project_name"):
-            scope_bits.append(f"**{d['project_name']}**")
+            scope_bits.append(f"<strong>{html.escape(d['project_name'])}</strong>")
         if d.get("sector"):
-            scope_bits.append(f"**{d['sector']}** sector")
+            scope_bits.append(f"<strong>{html.escape(d['sector'])}</strong> sector")
         if d.get("timeline"):
-            scope_bits.append(f"Timeline: **{d['timeline']}**")
+            scope_bits.append(f"Timeline: <strong>{html.escape(d['timeline'])}</strong>")
         if d.get("num_beneficiaries"):
-            scope_bits.append(f"~**{d['num_beneficiaries']:,}** beneficiaries")
+            scope_bits.append(f"~<strong>{d['num_beneficiaries']:,}</strong> beneficiaries")
 
         scope_html = "  •  ".join(scope_bits) if scope_bits else "Details captured for scoping."
         st.markdown(f"<div class='scope-section'>{scope_html}</div>", unsafe_allow_html=True)
