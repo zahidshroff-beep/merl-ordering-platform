@@ -1,7 +1,8 @@
 """
-MERL Order - Module 1
+MERL Order - Module 1 (Improved)
 Professional customer-facing web app for configuring and ordering MERL services.
-Built with Streamlit. Clean, modern, guided ordering experience.
+Branded for Altamont Group with logo integration and premium UX polish.
+Built with Streamlit.
 """
 
 import streamlit as st
@@ -12,8 +13,8 @@ import random
 # CONFIGURATION - Easy to modify pricing, packages, and descriptions
 # ============================================================================
 
-PAGE_TITLE = "MERL Order | Professional MERL Services"
-PAGE_ICON = "📊"
+PAGE_TITLE = "MERL Order | Altamont Group"
+PAGE_ICON = "altamont_logo.png"
 
 # Brand colors (calm, professional consulting palette)
 PRIMARY_BLUE = "#1E3A5F"      # Deep navy blue
@@ -24,6 +25,9 @@ CARD_BORDER = "#CBD5E1"       # Slate gray for cards
 BG_LIGHT = "#F8FAFC"          # App background
 TEXT_DARK = "#1E293B"         # Main text
 TEXT_MUTED = "#64748B"        # Secondary text
+
+# Logo path (assumes file is in the same directory as app.py)
+LOGO_PATH = "altamont_logo.png"
 
 # Entry-level packages (low-ticket entry points)
 PACKAGES = {
@@ -152,6 +156,33 @@ def clear_all_selections():
     # Reset order flow
     st.session_state.order_submitted = False
     st.session_state.proposal_data = None
+    st.session_state.submit_error = None
+
+
+def load_example_order():
+    """Prefill the form with a realistic example order for demo purposes."""
+    # Select a base package
+    st.session_state.base_package = "Quick Evaluation Pack"
+
+    # Select 2-3 add-ons
+    example_addons = [
+        "Advanced Indicator Framework",
+        "Data Collection Tools & Templates",
+        "Automated Reporting & Insights",
+    ]
+    for name in ADDONS.keys():
+        key = f"cb_{name.replace(' ', '_').replace('&', 'and')}"
+        st.session_state[key] = name in example_addons
+
+    # Fill project details
+    st.session_state.proj_name = "USAID Health Resilience Initiative - Phase II"
+    st.session_state.org_name = "Ministry of Health - Republic of Kenya"
+    st.session_state.contact_email = "merl@health.go.ke"
+    st.session_state.sector = "Global Health"
+    st.session_state.timeline = "6-12 months"
+    st.session_state.num_indicators = 45
+    st.session_state.notes = "Strong emphasis on gender and youth indicators. Data collection must be feasible in remote counties. Dashboard should integrate with DHIS2."
+
     st.session_state.submit_error = None
 
 
@@ -340,24 +371,26 @@ def inject_custom_css():
         opacity: 0.9;
     }}
 
-    /* Hero section */
+    /* Hero section - more premium */
     .hero {{
         text-align: center;
-        padding: 1.25rem 0 1.75rem;
+        padding: 1.6rem 1.2rem 1.8rem;
         background: white;
-        border-radius: 16px;
+        border-radius: 18px;
         border: 1px solid {CARD_BORDER};
-        margin-bottom: 1.5rem;
+        margin-bottom: 1.25rem;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
     }}
     .hero h1 {{
-        font-size: 2.1rem;
-        margin-bottom: 0.35rem;
+        font-size: 2.35rem;
+        line-height: 1.15;
+        margin-bottom: 0.4rem;
         color: {PRIMARY_BLUE};
     }}
     .hero p {{
         font-size: 1.05rem;
         color: {TEXT_MUTED};
-        max-width: 620px;
+        max-width: 640px;
         margin: 0 auto;
     }}
 
@@ -371,20 +404,21 @@ def inject_custom_css():
         border-bottom: 2px solid {LIGHT_TEAL};
     }}
 
-    /* Package cards */
+    /* Package cards - more premium */
     .package-card {{
         background: white;
-        border: 2px solid {CARD_BORDER};
+        border: 1.5px solid {CARD_BORDER};
         border-radius: 14px;
-        padding: 18px 16px;
+        padding: 20px 18px;
         height: 100%;
         transition: all 0.2s ease;
-        box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+        box-shadow: 0 2px 6px rgba(0,0,0,0.05);
     }}
     .package-card.selected {{
         border-color: {SOFT_GREEN};
         background: {LIGHT_TEAL};
-        box-shadow: 0 4px 12px rgba(5, 150, 105, 0.12);
+        box-shadow: 0 6px 16px rgba(5, 150, 105, 0.15);
+        transform: translateY(-1px);
     }}
     .package-card h4 {{
         margin: 0 0 6px 0;
@@ -407,17 +441,19 @@ def inject_custom_css():
         margin-bottom: 2px;
     }}
 
-    /* Add-on cards */
+    /* Add-on cards - premium feel */
     .addon-card {{
         background: white;
         border: 1px solid {CARD_BORDER};
-        border-radius: 10px;
-        padding: 12px 14px;
+        border-radius: 12px;
+        padding: 14px 15px;
         height: 100%;
         transition: all 0.2s ease;
+        box-shadow: 0 1px 4px rgba(0,0,0,0.03);
     }}
     .addon-card:hover {{
         border-color: #94a3b8;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.06);
     }}
     .addon-title {{
         font-weight: 600;
@@ -456,14 +492,13 @@ def inject_custom_css():
     .proposal-header {{
         background: linear-gradient(90deg, {ACCENT_TEAL} 0%, {SOFT_GREEN} 100%);
         color: white;
-        padding: 24px;
+        padding: 18px 24px;
         border-radius: 14px;
         text-align: center;
-        margin-bottom: 1.5rem;
     }}
     .proposal-header h2 {{
         color: white;
-        margin: 0;
+        margin: 4px 0 2px;
     }}
     .scope-box {{
         background: white;
@@ -511,61 +546,90 @@ def inject_custom_css():
 # ============================================================================
 
 def render_top_bar():
-    """Thin professional header bar."""
+    """Professional header with Altamont Group branding and logo."""
+    col_logo, col_title = st.columns([0.9, 5.5], vertical_alignment="center")
+
+    with col_logo:
+        try:
+            st.image(LOGO_PATH, width=52)
+        except Exception:
+            st.markdown("**ALTAMONT**")  # fallback
+
+    with col_title:
+        st.markdown(
+            f"""
+            <div style="display:flex; align-items:center; gap:12px;">
+                <div>
+                    <span style="font-size:1.55rem; font-weight:700; color:{PRIMARY_BLUE}; letter-spacing:-0.4px;">MERL Order</span>
+                    <span style="font-size:0.8rem; color:{TEXT_MUTED}; margin-left:8px;">by Altamont Group</span>
+                </div>
+            </div>
+            """,
+            unsafe_allow_html=True,
+        )
+
     st.markdown(
         f"""
-        <div class="top-bar">
-            <div>
-                <span class="brand">MERL Order</span>
-                <span class="tag" style="margin-left:12px;">Module 1 • Professional Services</span>
-            </div>
-            <div style="font-size:0.8rem; opacity:0.9;">Transparent • Guided • Built for Impact</div>
-        </div>
+        <div style="background: linear-gradient(90deg, {PRIMARY_BLUE} 0%, {ACCENT_TEAL} 100%); 
+                    height: 3px; border-radius: 2px; margin: 8px 0 18px 0;"></div>
         """,
         unsafe_allow_html=True,
     )
 
 
 def render_hero():
-    """Welcome / headline section."""
+    """Improved professional hero with stronger messaging and demo helper."""
     st.markdown(
-        """
+        f"""
         <div class="hero">
-            <h1 style="margin-bottom:0.25rem;">Configure your MERL engagement in minutes</h1>
-            <p style="margin:0 auto 0.6rem; max-width:560px;">
-                Select a package, add the capabilities you need, and receive a clear proposal with transparent pricing.
+            <h1 style="margin-bottom:0.35rem; font-size:2.25rem;">Professional MERL Services,<br>Configured in Minutes</h1>
+            <p style="margin:0 auto 0.8rem; max-width:620px; font-size:1.05rem;">
+                Get a clear, transparent proposal for monitoring, evaluation, research, and learning services 
+                tailored to your program.
             </p>
-            <div style="margin-top:0.6rem; font-size:0.85rem; color:#64748B;">
-                Trusted by NGOs, foundations, and bilateral programs worldwide
+            <div style="margin-top:0.4rem; font-size:0.9rem; color:#475569;">
+                <strong>Altamont Group</strong> — Delivering high-quality MERL solutions across Africa and beyond
             </div>
         </div>
         """,
         unsafe_allow_html=True,
     )
 
+    # Load Example button - very useful for demos
+    col1, col2, col3 = st.columns([1.5, 2, 1.5])
+    with col2:
+        if st.button(
+            "🚀 Load Example Order",
+            type="secondary",
+            use_container_width=True,
+            help="Prefills a realistic sample order so you can quickly explore the full experience",
+        ):
+            load_example_order()
+            st.rerun()
+
 
 def render_trust_signals():
-    """Small row of credibility markers."""
+    """Professional trust signals aligned with Altamont Group branding."""
     c1, c2, c3 = st.columns(3)
     with c1:
         st.markdown(
-            f"<div style='text-align:center; padding:6px; background:white; border-radius:8px; border:1px solid {CARD_BORDER};'>"
-            "<div style='font-size:1.1rem; font-weight:700; color:#0F766E;'>50+</div>"
-            "<div class='small-muted'>Organizations served</div></div>",
+            f"<div style='text-align:center; padding:8px 6px; background:white; border-radius:10px; border:1px solid {CARD_BORDER};'>"
+            "<div style='font-size:1.15rem; font-weight:700; color:#0F766E;'>12+</div>"
+            "<div class='small-muted'>Countries across Africa</div></div>",
             unsafe_allow_html=True,
         )
     with c2:
         st.markdown(
-            f"<div style='text-align:center; padding:6px; background:white; border-radius:8px; border:1px solid {CARD_BORDER};'>"
-            "<div style='font-size:1.1rem; font-weight:700; color:#0F766E;'>72</div>"
-            "<div class='small-muted'>Average client NPS</div></div>",
+            f"<div style='text-align:center; padding:8px 6px; background:white; border-radius:10px; border:1px solid {CARD_BORDER};'>"
+            "<div style='font-size:1.15rem; font-weight:700; color:#0F766E;'>85+</div>"
+            "<div class='small-muted'>MERL projects delivered</div></div>",
             unsafe_allow_html=True,
         )
     with c3:
         st.markdown(
-            f"<div style='text-align:center; padding:6px; background:white; border-radius:8px; border:1px solid {CARD_BORDER};'>"
-            "<div style='font-size:1.1rem; font-weight:700; color:#0F766E;'>48hr</div>"
-            "<div class='small-muted'>Typical proposal turnaround</div></div>",
+            f"<div style='text-align:center; padding:8px 6px; background:white; border-radius:10px; border:1px solid {CARD_BORDER};'>"
+            "<div style='font-size:1.15rem; font-weight:700; color:#0F766E;'>48hr</div>"
+            "<div class='small-muted'>Average proposal turnaround</div></div>",
             unsafe_allow_html=True,
         )
 
@@ -658,6 +722,7 @@ def render_project_details():
             "Project / Program Name *",
             key="proj_name",
             placeholder="e.g. USAID Health Resilience Activity 2025-2028",
+            help="The official name of the program or project this MERL support is for.",
         )
         st.text_input(
             "Organization (optional)",
@@ -690,6 +755,7 @@ def render_project_details():
             value=25,
             step=5,
             key="num_indicators",
+            help="This helps us estimate effort. A precise number is not required at this stage.",
         )
 
     st.text_area(
@@ -697,6 +763,7 @@ def render_project_details():
         key="notes",
         placeholder="e.g. Need strong gender and inclusion lens; data must integrate with DHIS2; remote data collection only.",
         height=90,
+        help="Any specific requirements, data systems, geographic constraints, or donor requirements we should know about.",
     )
 
 
@@ -751,7 +818,7 @@ def render_sidebar_summary():
             "Submit Order → Get Proposal",
             type="primary",
             use_container_width=True,
-            help="Review your selections in the main panel before submitting",
+            help="This will generate a professional proposal summary based on your selections. No data is sent yet.",
         )
 
         if submitted:
@@ -775,7 +842,7 @@ def render_sidebar_summary():
             st.rerun()
 
         st.markdown(
-            "<div class='small-muted' style='margin-top:12px; text-align:center;'>Module 1 — Frontend Demo<br>No payment or data stored</div>",
+            "<div class='small-muted' style='margin-top:12px; text-align:center;'>Altamont Group<br>Module 1 — Frontend Demo</div>",
             unsafe_allow_html=True,
         )
 
@@ -797,8 +864,8 @@ def render_config_interface():
 
     # Footer note
     st.markdown(
-        "<div style='margin-top:1.5rem; font-size:0.78rem; color:#64748B; text-align:center;'>"
-        "Your selections are saved automatically in this browser session. Use the sidebar to review pricing and submit."
+        "<div style='margin-top:1.25rem; font-size:0.78rem; color:#64748B; text-align:center;'>"
+        "Your selections are saved in this browser session. Use the sidebar to review pricing and submit."
         "</div>",
         unsafe_allow_html=True,
     )
@@ -814,17 +881,24 @@ def render_proposal_screen():
             st.rerun()
         return
 
-    # Header
-    st.markdown(
-        f"""
-        <div class="proposal-header">
-            <div style="font-size:0.9rem; opacity:0.9; margin-bottom:4px;">ORDER RECEIVED</div>
-            <h2>Proposal {data['proposal_id']}</h2>
-            <div style="margin-top:6px; font-size:0.95rem;">Generated on {data['submitted_at']}</div>
-        </div>
-        """,
-        unsafe_allow_html=True,
-    )
+    # Header with logo
+    col1, col2 = st.columns([1, 6])
+    with col1:
+        try:
+            st.image(LOGO_PATH, width=48)
+        except Exception:
+            pass
+    with col2:
+        st.markdown(
+            f"""
+            <div class="proposal-header" style="margin-bottom:0; padding:18px 24px;">
+                <div style="font-size:0.85rem; opacity:0.9;">ORDER RECEIVED</div>
+                <h2 style="margin:4px 0 2px;">Proposal {data['proposal_id']}</h2>
+                <div style="font-size:0.9rem;">Generated on {data['submitted_at']}</div>
+            </div>
+            """,
+            unsafe_allow_html=True,
+        )
 
     st.success("Thank you. Your configuration has been captured. A member of our MERL team will contact you shortly.", icon="📬")
 
@@ -913,7 +987,7 @@ def render_proposal_screen():
             st.rerun()
 
     st.markdown(
-        "<div class='small-muted' style='text-align:center; margin-top:1rem;'>This is a frontend prototype (Module 1). No data is stored or transmitted.</div>",
+        "<div class='small-muted' style='text-align:center; margin-top:1rem;'>Prepared by <strong>Altamont Group</strong> — Module 1 Frontend Prototype</div>",
         unsafe_allow_html=True,
     )
 
