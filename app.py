@@ -385,45 +385,47 @@ def inject_custom_css():
 
     .stApp {{
         background-color: var(--bg);
+        font-feature-settings: "kern" 1, "tnum" 1, "cv05" 1;
     }}
     
-    /* Global premium typography */
+    /* Global premium typography & rhythm */
     h1, h2, h3, h4, h5 {{
         color: var(--navy);
         font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
         font-weight: 700;
-        letter-spacing: -0.025em;
+        letter-spacing: -0.028em;
     }}
     
     .stMarkdown p, .stMarkdown li, .stMarkdown div, .stMarkdown span {{
         color: var(--text);
         font-size: 0.95rem;
-        line-height: 1.68;
+        line-height: 1.72;
     }}
 
-    /* Refined inputs with premium focus rings */
+    /* Refined inputs — even more premium, taller, better focus */
     .stTextInput input, .stNumberInput input, .stSelectbox select, .stTextArea textarea {{
         border: 1.5px solid var(--border) !important;
-        border-radius: 12px !important;
-        padding: 11px 15px !important;
-        font-size: 0.96rem !important;
+        border-radius: 14px !important;
+        padding: 12px 16px !important;
+        font-size: 0.95rem !important;
         transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
         background: var(--white) !important;
+        box-shadow: 0 1px 2px rgb(15 23 42 / 0.03) !important;
     }}
     .stTextInput input:focus, .stNumberInput input:focus, .stSelectbox select:focus, .stTextArea textarea:focus {{
         border-color: var(--teal) !important;
-        box-shadow: 0 0 0 5px rgba(15, 118, 110, 0.10) !important;
+        box-shadow: 0 0 0 6px rgba(15, 118, 110, 0.11), 0 1px 2px rgb(15 23 42 / 0.04) !important;
         outline: none !important;
     }}
     .stTextInput label, .stNumberInput label, .stSelectbox label, .stTextArea label {{
         font-weight: 600 !important;
         color: var(--navy) !important;
-        font-size: 0.88rem !important;
-        margin-bottom: 7px !important;
-        letter-spacing: -0.01em;
+        font-size: 0.87rem !important;
+        margin-bottom: 8px !important;
+        letter-spacing: -0.012em;
     }}
 
-    /* Top brand header - elevated executive feel */
+    /* Top brand header — refined executive bar */
     .top-brand-bar {{
         background: linear-gradient(90deg, var(--navy) 0%, #0b1426 100%);
         padding: 16px 36px;
@@ -436,15 +438,15 @@ def inject_custom_css():
         box-shadow: 0 10px 30px -10px rgb(11 20 38 / 0.35);
     }}
 
-    /* Hero - significantly more premium and impactful */
+    /* HERO — significantly more premium, breathing room, modern presence */
     .hero-section {{
         text-align: center;
-        padding: 2.9rem 2.25rem 2.55rem;
+        padding: 3.15rem 2.6rem 2.75rem;
         background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
         border-radius: 28px;
         border: 1px solid var(--border);
-        margin-bottom: 2rem;
-        box-shadow: 0 30px 60px -15px rgb(15 23 42 / 0.09), 0 15px 25px -10px rgb(15 23 42 / 0.05);
+        margin-bottom: 1.85rem;
+        box-shadow: 0 35px 70px -18px rgb(15 23 42 / 0.10), 0 18px 30px -12px rgb(15 23 42 / 0.06);
         position: relative;
         overflow: hidden;
     }}
@@ -457,233 +459,269 @@ def inject_custom_css():
     }}
     
     .hero-headline {{
-        font-size: 2.72rem;
-        line-height: 1.05;
+        font-size: 2.84rem;
+        line-height: 1.03;
         font-weight: 700;
         color: var(--navy);
-        margin-bottom: 0.55rem;
-        letter-spacing: -0.72px;
+        margin-bottom: 0.52rem;
+        letter-spacing: -0.78px;
     }}
     
     .hero-sub {{
-        font-size: 1.06rem;
+        font-size: 1.05rem;
         color: var(--muted);
-        max-width: 660px;
-        margin: 0 auto 1.25rem;
-        line-height: 1.62;
+        max-width: 680px;
+        margin: 0 auto 1.35rem;
+        line-height: 1.65;
     }}
 
-    /* Trust bar - refined, more elegant */
+    /* Trust bar — elegant, elevated credibility */
     .trust-card {{
         background: white;
         border: 1px solid var(--border);
         border-radius: 18px;
-        padding: 15px 12px 13px;
+        padding: 16px 13px 14px;
         text-align: center;
-        box-shadow: 0 6px 16px -4px rgb(15 23 42 / 0.06);
+        box-shadow: 0 6px 18px -5px rgb(15 23 42 / 0.06);
         transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
     }}
     .trust-card:hover {{
-        transform: translateY(-2px);
-        box-shadow: 0 14px 25px -6px rgb(15 23 42 / 0.09);
+        transform: translateY(-3px);
+        box-shadow: 0 16px 28px -8px rgb(15 23 42 / 0.10);
         border-color: #cbd5e1;
     }}
     .trust-num {{
-        font-size: 1.52rem;
+        font-size: 1.56rem;
         font-weight: 700;
         color: var(--teal);
         line-height: 1.0;
-        letter-spacing: -0.4px;
+        letter-spacing: -0.42px;
     }}
 
-    /* Premium section headers with refined accent */
+    /* Premium section headers */
     .section-header {{
-        font-size: 1.18rem;
+        font-size: 1.19rem;
         font-weight: 700;
         color: var(--navy);
-        margin: 2.1rem 0 0.55rem;
-        padding-bottom: 9px;
-        letter-spacing: -0.28px;
+        margin: 2.25rem 0 0.52rem;
+        padding-bottom: 10px;
+        letter-spacing: -0.3px;
         display: flex;
         align-items: center;
-        gap: 14px;
+        gap: 15px;
     }}
     .section-header::before {{
         content: "";
         display: inline-block;
-        width: 32px;
-        height: 3.5px;
+        width: 34px;
+        height: 3.75px;
         background: linear-gradient(to right, var(--teal), var(--teal-soft));
         border-radius: 4px;
     }}
     .section-caption {{
         color: var(--muted);
         font-size: 0.91rem;
-        margin-bottom: 1.05rem;
-        line-height: 1.52;
+        margin-bottom: 1.1rem;
+        line-height: 1.55;
     }}
 
-    /* SIGNIFICANTLY IMPROVED Package cards - luxurious, clear selection */
+    /* PREMIUM Package cards — luxurious depth, refined selection, generous spacing */
     .pkg-card {{
         background: white;
-        border: 1.75px solid var(--border);
+        border: 1.5px solid var(--border);
         border-radius: 22px;
-        padding: 26px 24px 22px;
+        padding: 28px 26px 24px;
         height: 100%;
-        transition: all 0.28s cubic-bezier(0.4, 0.0, 0.2, 1);
-        box-shadow: 0 6px 16px -4px rgb(15 23 42 / 0.07), 0 3px 6px -2px rgb(15 23 42 / 0.04);
+        transition: all 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
+        box-shadow: 0 8px 20px -6px rgb(15 23 42 / 0.08), 0 4px 8px -3px rgb(15 23 42 / 0.05);
         position: relative;
+        display: flex;
+        flex-direction: column;
+    }}
+    .pkg-card:hover {{
+        border-color: #cbd5e1;
+        box-shadow: 0 18px 35px -10px rgb(15 23 42 / 0.11), 0 8px 14px -4px rgb(15 23 42 / 0.06);
+        transform: translateY(-3px);
     }}
     .pkg-card.selected {{
         border-color: var(--teal);
         background: linear-gradient(180deg, #f0fdfa 0%, #ffffff 100%);
-        box-shadow: 0 22px 35px -10px rgb(13 148 136 / 0.18), 0 12px 14px -6px rgb(13 148 136 / 0.10);
-        transform: translateY(-4px);
+        box-shadow: 0 26px 42px -12px rgb(13 148 136 / 0.20), 0 14px 18px -7px rgb(13 148 136 / 0.12);
+        transform: translateY(-5px);
+    }}
+    .pkg-card.selected::before {{
+        content: "";
+        position: absolute;
+        top: 0; left: 0; right: 0;
+        height: 5px;
+        background: linear-gradient(to right, var(--teal), var(--teal-soft));
+        border-radius: 22px 22px 0 0;
     }}
     .pkg-card.selected::after {{
         content: "SELECTED";
         position: absolute;
-        top: 16px;
-        right: 18px;
+        top: 19px;
+        right: 20px;
         background: var(--teal);
         color: white;
-        font-size: 0.66rem;
+        font-size: 0.65rem;
         font-weight: 700;
-        letter-spacing: 1.1px;
-        padding: 2px 9px 1px;
+        letter-spacing: 1.25px;
+        padding: 3px 10px 2px;
         border-radius: 999px;
+        box-shadow: 0 2px 4px rgb(13 148 136 / 0.25);
     }}
     .pkg-card h3 {{
-        margin: 0 0 5px 0;
-        font-size: 1.24rem;
+        margin: 0 0 4px 0;
+        font-size: 1.26rem;
         font-weight: 700;
         color: var(--navy);
-        letter-spacing: -0.3px;
+        letter-spacing: -0.32px;
     }}
     .pkg-tagline {{
-        font-size: 0.81rem;
+        font-size: 0.79rem;
         color: var(--teal);
         font-weight: 700;
-        letter-spacing: 0.18px;
-        margin-bottom: 12px;
+        letter-spacing: 0.2px;
+        margin-bottom: 13px;
         text-transform: uppercase;
     }}
     .pkg-benefit {{
         font-size: 0.93rem;
-        line-height: 1.52;
+        line-height: 1.55;
         color: var(--text);
-        margin-bottom: 15px;
-        min-height: 82px;
+        margin-bottom: 16px;
+        min-height: 78px;
+        flex: 1;
     }}
     .pkg-price {{
-        font-size: 2.12rem;
+        font-size: 2.18rem;
         font-weight: 700;
         color: var(--teal);
-        margin: 4px 0 3px;
-        letter-spacing: -0.6px;
+        margin: 2px 0 2px;
+        letter-spacing: -0.65px;
         line-height: 1;
     }}
     .pkg-price small {{
-        font-size: 0.7rem;
+        font-size: 0.68rem;
         font-weight: 500;
         color: #64748b;
         letter-spacing: normal;
     }}
+    .pkg-includes {{
+        margin-top: 4px;
+        padding-top: 10px;
+        border-top: 1px solid var(--border);
+    }}
 
-    /* Greatly improved Add-on cards - clean, trustworthy, interactive feel */
+    /* Premium Add-on cards — fully realized, interactive, consistent with packages */
     .addon-card {{
         background: white;
-        border: 1px solid var(--border);
+        border: 1.25px solid var(--border);
         border-radius: 18px;
-        padding: 19px 20px 17px;
+        padding: 18px 19px 16px;
         height: 100%;
         transition: all 0.22s cubic-bezier(0.4, 0, 0.2, 1);
+        box-shadow: 0 4px 12px -3px rgb(15 23 42 / 0.05);
+        display: flex;
+        flex-direction: column;
     }}
     .addon-card:hover {{
         border-color: #94a3b8;
-        box-shadow: 0 14px 24px -8px rgb(15 23 42 / 0.08);
+        box-shadow: 0 16px 26px -8px rgb(15 23 42 / 0.10);
+        transform: translateY(-2px);
+    }}
+    .addon-card .stCheckbox {{
+        margin-top: auto;
+        padding-top: 8px;
     }}
     .addon-title {{
         font-weight: 700;
-        font-size: 0.98rem;
+        font-size: 0.97rem;
         color: var(--navy);
-        margin-bottom: 4px;
-        letter-spacing: -0.15px;
+        margin-bottom: 5px;
+        letter-spacing: -0.14px;
+        line-height: 1.3;
     }}
     .addon-desc {{
-        font-size: 0.84rem;
+        font-size: 0.83rem;
         color: var(--muted);
-        line-height: 1.5;
-        margin-bottom: 8px;
-        min-height: 54px;
+        line-height: 1.52;
+        margin-bottom: 7px;
+        flex: 1;
+        min-height: 46px;
     }}
     .addon-value {{
-        font-size: 0.8rem;
+        font-size: 0.79rem;
         font-style: italic;
         color: var(--teal);
-        margin-bottom: 6px;
-        line-height: 1.35;
+        margin-bottom: 7px;
+        line-height: 1.38;
     }}
     .addon-price {{
         color: var(--teal-soft);
         font-weight: 700;
-        font-size: 1.02rem;
+        font-size: 1.04rem;
         letter-spacing: -0.2px;
+        display: block;
+        margin-bottom: 2px;
     }}
 
-    /* Sidebar total - executive dark card */
+    /* Sidebar total — executive, clean, trustworthy */
     .sidebar-total {{
-        background: linear-gradient(160deg, var(--navy) 0%, #0b1426 100%);
+        background: linear-gradient(155deg, var(--navy) 0%, #0a1322 100%);
         color: white;
-        padding: 20px 22px;
+        padding: 21px 24px 19px;
         border-radius: 18px;
         text-align: center;
-        margin: 18px 0 12px;
-        box-shadow: 0 14px 28px -8px rgb(11 20 38 / 0.38);
+        margin: 16px 0 10px;
+        box-shadow: 0 16px 32px -10px rgb(11 20 38 / 0.42);
+        border: 1px solid rgba(255,255,255,0.06);
     }}
     .sidebar-total .label {{
-        font-size: 0.68rem;
-        opacity: 0.78;
+        font-size: 0.66rem;
+        opacity: 0.8;
         text-transform: uppercase;
-        letter-spacing: 1.4px;
+        letter-spacing: 1.6px;
         font-weight: 600;
     }}
     .sidebar-total .amount {{
-        font-size: 2.28rem;
+        font-size: 2.36rem;
         font-weight: 700;
         line-height: 1.0;
-        margin-top: 2px;
-        letter-spacing: -0.7px;
+        margin-top: 3px;
+        letter-spacing: -0.78px;
     }}
 
-    /* Proposal screen - document quality */
+    /* Proposal screen — high-end client document quality */
     .proposal-container {{
-        max-width: 1080px;
+        max-width: 1100px;
         margin: 0 auto;
-        padding-bottom: 2rem;
+        padding-bottom: 2.2rem;
     }}
     .proposal-banner {{
         background: linear-gradient(135deg, var(--navy) 0%, #1e2937 100%);
         color: white;
-        padding: 26px 34px;
+        padding: 27px 36px;
         border-radius: 20px;
-        margin: 12px 0 24px;
-        box-shadow: 0 20px 40px -12px rgb(15 23 42 / 0.32);
+        margin: 10px 0 26px;
+        box-shadow: 0 22px 44px -14px rgb(15 23 42 / 0.34);
+        border: 1px solid rgba(255,255,255,0.08);
     }}
     .scope-section {{
         background: #f8fafc;
         border: 1px solid var(--border);
         border-radius: 14px;
-        padding: 16px 20px;
-        margin-bottom: 0.9rem;
+        padding: 17px 21px;
+        margin-bottom: 0.95rem;
         box-shadow: 0 2px 6px rgb(15 23 42 / 0.025);
         font-size: 0.94rem;
-        line-height: 1.55;
+        line-height: 1.58;
     }}
     .next-steps-box {{
         background: #f0fdfa;
         border-left: 7px solid var(--teal);
-        padding: 18px 22px;
+        padding: 19px 23px;
         border-radius: 14px;
         margin: 0.95rem 0;
     }}
@@ -693,75 +731,80 @@ def inject_custom_css():
     }}
     .next-steps-box li {{
         margin-bottom: 6px;
-        line-height: 1.52;
+        line-height: 1.55;
         font-size: 0.93rem;
     }}
 
-    /* Prominent final CTA zone after form - now much stronger */
+    /* Prominent, unmistakable CTA zone for Request My Proposal */
     .submit-cta {{
         background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
-        border: 2.5px solid var(--teal);
+        border: 2.75px solid var(--teal);
         border-radius: 24px;
-        padding: 30px 36px 28px;
-        margin: 2.1rem 0 0.6rem;
+        padding: 32px 38px 30px;
+        margin: 2.25rem 0 0.55rem;
         text-align: center;
-        box-shadow: 0 25px 40px -15px rgb(13 148 136 / 0.13), 0 12px 14px -6px rgb(13 148 136 / 0.07);
+        box-shadow: 0 28px 48px -16px rgb(13 148 136 / 0.15), 0 14px 18px -7px rgb(13 148 136 / 0.08);
     }}
     .submit-cta h3 {{
-        font-size: 1.42rem;
-        margin: 0 0 8px;
+        font-size: 1.48rem;
+        margin: 0 0 9px;
         color: var(--navy);
-        letter-spacing: -0.3px;
+        letter-spacing: -0.32px;
     }}
     .submit-cta p {{
         color: var(--muted);
-        max-width: 560px;
-        margin: 0 auto 20px;
+        max-width: 580px;
+        margin: 0 auto 22px;
         font-size: 0.96rem;
-        line-height: 1.58;
+        line-height: 1.6;
     }}
 
-    /* Premium primary buttons */
+    /* Premium buttons — stronger presence, modern interaction */
     .stButton > button {{
         border-radius: 14px;
         font-weight: 700;
-        padding: 0.65rem 1.55rem;
-        letter-spacing: 0.18px;
-        transition: all 0.18s cubic-bezier(0.4, 0, 0.2, 1);
+        padding: 0.68rem 1.7rem;
+        letter-spacing: 0.2px;
+        transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        font-size: 0.94rem;
     }}
     .stButton > button[kind="primary"] {{
-        background: linear-gradient(155deg, var(--teal) 0%, var(--teal-soft) 100%);
+        background: linear-gradient(160deg, var(--teal) 0%, var(--teal-soft) 100%);
         border-color: var(--teal);
-        box-shadow: 0 8px 20px -5px rgb(13 148 136 / 0.38);
+        box-shadow: 0 10px 24px -6px rgb(13 148 136 / 0.42);
         color: white !important;
     }}
     .stButton > button[kind="primary"]:hover {{
-        transform: translateY(-2px);
-        box-shadow: 0 14px 26px -6px rgb(13 148 136 / 0.42);
-        background: linear-gradient(155deg, var(--teal-soft) 0%, var(--teal) 100%);
+        transform: translateY(-2.5px);
+        box-shadow: 0 16px 30px -7px rgb(13 148 136 / 0.48);
+        background: linear-gradient(160deg, var(--teal-soft) 0%, var(--teal) 100%);
     }}
     .stButton > button[kind="secondary"] {{
         border: 1.75px solid var(--border);
         background: white;
+        color: var(--navy);
     }}
     .stButton > button[kind="secondary"]:hover {{
         background: #f8fafc;
         border-color: #94a3b8;
+        transform: translateY(-1px);
     }}
 
-    /* Strong email action panel on proposal */
+    /* The example loader gets extra visual weight from placement + emoji label in hero */
+
+    /* Strong email action panel on proposal — clear next step */
     .email-action-panel {{
         background: linear-gradient(180deg, #f0fdfa 0%, #ecfdf5 100%);
         border: 2px solid #14b8a6;
         border-radius: 20px;
-        padding: 26px 30px;
-        margin: 1.1rem 0 1.35rem;
-        box-shadow: 0 12px 25px -8px rgb(13 148 136 / 0.12);
+        padding: 26px 32px;
+        margin: 1.05rem 0 1.4rem;
+        box-shadow: 0 14px 28px -9px rgb(13 148 136 / 0.14);
     }}
     .email-action-panel .instruction {{
         font-size: 0.97rem;
         color: #0f766e;
-        line-height: 1.5;
+        line-height: 1.52;
         margin-bottom: 14px;
         font-weight: 500;
     }}
@@ -779,20 +822,20 @@ def inject_custom_css():
     }}
 
     .small-muted {{
-        font-size: 0.77rem;
+        font-size: 0.76rem;
         color: var(--muted);
     }}
     .premium-note {{
         font-size: 0.81rem;
         color: #64748b;
         text-align: center;
-        margin-top: 1.55rem;
+        margin-top: 1.65rem;
         letter-spacing: -0.1px;
     }}
 
-    /* Minor Streamlit polish */
+    /* Minor Streamlit polish + spacing */
     .stDivider {{
-        margin: 1.15rem 0 !important;
+        margin: 1.2rem 0 !important;
     }}
     .stSuccess {{
         border-radius: 14px;
@@ -800,6 +843,11 @@ def inject_custom_css():
     }}
     .stExpander {{
         border-radius: 14px !important;
+    }}
+    
+    /* Better column & container breathing */
+    .stColumn > div {{
+        gap: 0.35rem;
     }}
     </style>
     """
@@ -810,33 +858,33 @@ def inject_custom_css():
 # ============================================================================
 
 def render_top_bar():
-    """Premium, trustworthy header with prominent, high-visibility logo."""
-    col_logo, col_text, col_spacer = st.columns([1.0, 5.1, 1.2])
+    """Ultra-premium header bar with elevated executive presence."""
+    col_logo, col_text, col_spacer = st.columns([0.95, 5.4, 0.9])
     
     with col_logo:
         try:
-            st.image(LOGO_PATH, width=138)
+            st.image(LOGO_PATH, width=132)
         except Exception:
-            st.markdown(f"<span style='font-size:1.12rem; font-weight:700; color:{PRIMARY_NAVY};'>ALTAMONT GROUP</span>", unsafe_allow_html=True)
+            st.markdown(f"<span style='font-size:1.08rem; font-weight:700; color:{PRIMARY_NAVY};'>ALTAMONT GROUP</span>", unsafe_allow_html=True)
     
     with col_text:
         st.markdown(
             f"""
-            <div style="padding-top: 3px;">
-                <span style="font-size:1.52rem; font-weight:700; color:{PRIMARY_NAVY}; letter-spacing:-0.38px;">Altamont Group</span><br>
-                <span style="font-size:0.84rem; color:{TEXT_MUTED}; font-weight:500;">Strategic advisory for measurable impact • Global reach, boutique attention</span>
+            <div style="padding-top:1px;">
+                <span style="font-size:1.58rem; font-weight:700; color:{PRIMARY_NAVY}; letter-spacing:-0.42px;">Altamont Group</span><br>
+                <span style="font-size:0.82rem; color:{TEXT_MUTED}; font-weight:500; letter-spacing:-0.01em;">Strategic advisory for measurable impact &nbsp;•&nbsp; Global reach, boutique precision</span>
             </div>
             """,
             unsafe_allow_html=True,
         )
 
     st.markdown(
-        f"""<div style="height:1px; background:{CARD_BORDER}; margin:14px 0 18px 0;"></div>""",
+        f"""<div style="height:1px; background:linear-gradient(to right, transparent, {CARD_BORDER}, transparent); margin:13px 0 20px 0;"></div>""",
         unsafe_allow_html=True,
     )
 
 def render_hero():
-    """Strong, client-centric opening with premium presence."""
+    """Premium, high-impact hero with prominent, attractive example loader."""
     st.markdown(
         """
         <div class="hero-section">
@@ -853,22 +901,22 @@ def render_hero():
         unsafe_allow_html=True,
     )
 
-    # Centered example loader — secondary but easy to find
-    c1, c2, c3 = st.columns([1.15, 2.3, 1.15])
+    # Prominent, attractive "Load a Realistic Example" — now highly visible
+    c1, c2, c3 = st.columns([1.0, 2.6, 1.0])
     with c2:
         if st.button(
-            "Load a realistic foundation example",
+            "✨  Load a Realistic Example",
             type="secondary",
             use_container_width=True,
-            help="See a complete, high-quality order that a real foundation might submit",
+            help="Load a complete, high-quality sample order from a real foundation to explore the experience",
         ):
             load_example_order()
             st.rerun()
 
     st.markdown(
         f"""
-        <div style="text-align:center; margin-top:0.35rem;">
-            <span class="small-muted">Typical turnaround: proposal in your inbox within 48 hours • Clear next steps always provided</span>
+        <div style="text-align:center; margin-top:0.25rem; margin-bottom:0.6rem;">
+            <span class="small-muted">See exactly how a strong order looks • 48-hour proposal turnaround • No obligation</span>
         </div>
         """,
         unsafe_allow_html=True,
@@ -917,10 +965,12 @@ def render_package_selection():
             st.markdown(f"<div class='pkg-tagline'>{info['tagline']}</div>", unsafe_allow_html=True)
             st.markdown(f"<div class='pkg-benefit'>{info['client_benefit']}</div>", unsafe_allow_html=True)
             st.markdown(f"<div class='pkg-price'>${info['price']:,}</div>", unsafe_allow_html=True)
-            st.markdown("<div style='font-size:0.78rem; font-weight:600; color:#334155; margin:6px 0 4px;'>You receive:</div>", unsafe_allow_html=True)
-
+            
+            st.markdown("<div class='pkg-includes'>", unsafe_allow_html=True)
+            st.markdown("<div style='font-size:0.77rem; font-weight:600; color:#334155; margin-bottom:5px; letter-spacing:0.01em;'>YOU RECEIVE</div>", unsafe_allow_html=True)
             for item in info["includes"]:
-                st.markdown(f"<div style='font-size:0.82rem; line-height:1.38; margin-bottom:2px;'>• {item}</div>", unsafe_allow_html=True)
+                st.markdown(f"<div style='font-size:0.81rem; line-height:1.42; margin-bottom:2.5px; color:#334155;'>• {item}</div>", unsafe_allow_html=True)
+            st.markdown("</div>", unsafe_allow_html=True)
 
             st.markdown("</div>", unsafe_allow_html=True)
 
@@ -936,7 +986,7 @@ def render_package_selection():
                 st.rerun()
 
 def render_addon_selection():
-    """Clean, transparent add-ons with client value."""
+    """Premium, interactive add-on cards with full visual consistency and client value."""
     st.markdown('<div class="section-header">2. Add targeted enhancements (optional)</div>', unsafe_allow_html=True)
     st.caption("Select only what you need. Every add-on is priced as a one-time enhancement and can be discussed in more detail during scoping.")
 
@@ -954,17 +1004,19 @@ def render_addon_selection():
             key = f"cb_{name.replace(' ', '_').replace('&', 'and').replace(',', '')}"
 
             with col:
-                with st.container(border=True):
-                    st.markdown(f"<div class='addon-title'>{name}</div>", unsafe_allow_html=True)
-                    st.markdown(f"<div class='addon-desc'>{info['desc']}</div>", unsafe_allow_html=True)
-                    st.markdown(f"<div class='addon-value'>{info['client_value']}</div>", unsafe_allow_html=True)
-                    st.markdown(f"<span class='addon-price'>+ ${info['price']:,}</span>", unsafe_allow_html=True)
+                # Fully custom premium card (matches package card quality)
+                st.markdown(f'<div class="addon-card">', unsafe_allow_html=True)
+                st.markdown(f"<div class='addon-title'>{name}</div>", unsafe_allow_html=True)
+                st.markdown(f"<div class='addon-desc'>{info['desc']}</div>", unsafe_allow_html=True)
+                st.markdown(f"<div class='addon-value'>{info['client_value']}</div>", unsafe_allow_html=True)
+                st.markdown(f"<span class='addon-price'>+ ${info['price']:,}</span>", unsafe_allow_html=True)
 
-                    st.checkbox(
-                        "Add to my order",
-                        key=key,
-                        value=st.session_state.get(key, False),
-                    )
+                st.checkbox(
+                    "Add to my order",
+                    key=key,
+                    value=st.session_state.get(key, False),
+                )
+                st.markdown("</div>", unsafe_allow_html=True)
 
 def render_project_details():
     """Short, respectful, relevant questions only."""
@@ -1025,29 +1077,27 @@ def render_project_details():
 
 
 def render_submit_cta():
-    """Prominent, clear 'Request My Proposal' button placed directly after the form.
-    This is the primary, obvious submission action the user was missing.
-    """
+    """Highly prominent, unmistakable 'Request My Proposal' primary action zone."""
     st.markdown('<div class="submit-cta">', unsafe_allow_html=True)
     st.markdown("### Ready to receive your custom proposal?", unsafe_allow_html=True)
     st.markdown(
-        "Review your selections in the sidebar, then click below. We will instantly generate a professional, "
-        "client-ready proposal summary with exact pricing, scope, and clear next steps for Altamont Group.",
+        "Review your selections in the sidebar, then click the button below. We will instantly generate a "
+        "professional, client-ready proposal with exact pricing, scope, and clear next steps.",
         unsafe_allow_html=True,
     )
 
-    # Large, centered, unmistakable primary action
-    col_l, col_btn, col_r = st.columns([1.35, 3.1, 1.35])
+    # Large, centered, high-visibility primary CTA
+    col_l, col_btn, col_r = st.columns([1.2, 3.4, 1.2])
     with col_btn:
         submitted = st.button(
             "Request My Proposal",
             type="primary",
             use_container_width=True,
-            help="Validates your selections and generates a detailed proposal ready to send to zs@altamontgroup.ca",
+            help="Validates your selections and generates a detailed professional proposal ready to send to Altamont Group",
         )
 
     st.markdown(
-        "<div style='margin-top:14px; font-size:0.82rem; color:#64748b;'>Your information is private to this session • No commitment until you email the proposal</div>",
+        "<div style='margin-top:15px; font-size:0.81rem; color:#64748b; letter-spacing:-0.01em;'>Private to this session • No commitment until you email the proposal • Typical response within 1 business day</div>",
         unsafe_allow_html=True,
     )
     st.markdown("</div>", unsafe_allow_html=True)
@@ -1065,53 +1115,66 @@ def render_submit_cta():
 
 
 def render_sidebar_summary():
-    """Clean, premium live order summary that feels trustworthy."""
+    """Cleaner, more professional live Order Summary — executive and trustworthy."""
     with st.sidebar:
         st.markdown("### Your Live Estimate")
-        st.caption("Updates instantly as you select options")
+        st.caption("Updates instantly • Transparent pricing")
 
         base = st.session_state.base_package
         addons = get_selected_addons()
         total = calculate_total(base, addons)
         details = get_current_form_values()
 
+        # Base package
         if base:
-            st.success(f"**{base}**")
-            st.markdown(f"<div style='font-size:0.9rem; color:#64748B; margin-top:-4px;'>${PACKAGES[base]['price']:,}</div>", unsafe_allow_html=True)
+            st.markdown(
+                f"""
+                <div style="background:#f8fafc; border:1px solid var(--border); border-radius:12px; padding:10px 13px; margin:8px 0 6px;">
+                    <div style="font-size:0.75rem; color:#64748b; letter-spacing:0.3px;">BASE PACKAGE</div>
+                    <div style="font-weight:700; color:#0f172a; font-size:0.98rem; line-height:1.25; margin:2px 0 1px;">{base}</div>
+                    <div style="color:#0d9488; font-weight:600; font-size:0.9rem;">${PACKAGES[base]['price']:,}</div>
+                </div>
+                """,
+                unsafe_allow_html=True,
+            )
         else:
             st.info("Select a starting package to begin")
 
+        # Enhancements
         if addons:
-            st.markdown("**Enhancements**")
+            st.markdown("<div style='font-size:0.73rem; color:#64748b; margin:8px 0 3px; letter-spacing:0.4px;'>ENHANCEMENTS</div>", unsafe_allow_html=True)
             for a in addons:
-                st.markdown(f"• {a} <span style='color:#0D9488; font-weight:600;'>+${ADDONS[a]['price']:,}</span>", unsafe_allow_html=True)
+                st.markdown(f"<div style='font-size:0.86rem; line-height:1.35; margin:1px 0;'>• {a} <span style='color:#0d9488; font-weight:600;'>+${ADDONS[a]['price']:,}</span></div>", unsafe_allow_html=True)
         else:
-            st.markdown("<span class='small-muted'>No enhancements selected</span>", unsafe_allow_html=True)
+            st.markdown("<div style='font-size:0.82rem; color:#94a3b8; margin:4px 0 2px;'>No enhancements selected</div>", unsafe_allow_html=True)
 
+        # Project context (compact)
         if details.get("project_name"):
-            st.markdown(f"**Project:** {details['project_name'][:48]}{'…' if len(details['project_name']) > 48 else ''}")
+            short = details['project_name'][:42] + ('…' if len(details['project_name']) > 42 else '')
+            st.markdown(f"<div style='margin-top:8px; font-size:0.81rem; color:#475569;'><strong>Project:</strong> {short}</div>", unsafe_allow_html=True)
 
-        st.divider()
+        st.markdown("<div style='height:1px; background:#e2e8f0; margin:14px 0 8px;'></div>", unsafe_allow_html=True)
 
+        # Executive total
         st.markdown(
             f"""
             <div class="sidebar-total">
                 <div class="label">Estimated Total Investment</div>
                 <div class="amount">${total:,}</div>
-                <div style="font-size:0.72rem; opacity:0.75; margin-top:4px;">USD • one-time professional fee</div>
+                <div style="font-size:0.71rem; opacity:0.78; margin-top:5px; letter-spacing:0.2px;">USD • ONE-TIME PROFESSIONAL FEE</div>
             </div>
             """,
             unsafe_allow_html=True,
         )
 
-        st.caption("Transparent estimate. Final pricing confirmed after a 30-minute scoping call.")
+        st.caption("Final pricing confirmed after scoping call. No hidden costs.")
 
-        # Keep sidebar submit for power users, but label matches the main CTA and points to the new flow
+        # Primary action in sidebar (matches main CTA)
         submitted = st.button(
             "Request My Proposal",
             type="primary",
             use_container_width=True,
-            help="Validates your selections and opens the professional proposal summary (same as the button below the form).",
+            help="Validates and generates your professional proposal summary",
         )
 
         if submitted:
@@ -1125,34 +1188,34 @@ def render_sidebar_summary():
                 st.session_state.submit_error = None
                 st.rerun()
 
-        st.divider()
+        st.markdown("<div style='height:1px; background:#e2e8f0; margin:14px 0 8px;'></div>", unsafe_allow_html=True)
 
         if st.button("Start Over — Clear Everything", use_container_width=True, type="secondary"):
             clear_all_selections()
             st.rerun()
 
         st.markdown(
-            "<div class='small-muted' style='text-align:center; line-height:1.35; margin-top:10px;'>"
+            "<div class='small-muted' style='text-align:center; line-height:1.4; margin-top:6px; font-size:0.72rem;'>"
             "Altamont Group<br>"
-            "<span style='font-size:0.7rem;'>Boutique advisory • Global reach</span></div>",
+            "<span style='opacity:0.7;'>Boutique • Global reach</span></div>",
             unsafe_allow_html=True,
         )
 
 def render_config_interface():
-    """Main client flow."""
+    """Main client flow with generous premium spacing."""
     render_top_bar()
     render_hero()
     render_trust_bar()
 
     render_package_selection()
-    st.markdown("<br>", unsafe_allow_html=True)
+    st.markdown("<div style='height: 6px;'></div>", unsafe_allow_html=True)
 
     render_addon_selection()
-    st.markdown("<br>", unsafe_allow_html=True)
+    st.markdown("<div style='height: 6px;'></div>", unsafe_allow_html=True)
 
     render_project_details()
 
-    # Prominent, clear call-to-action right after the form (the key missing piece)
+    # Prominent, clear call-to-action right after the form
     render_submit_cta()
 
     st.markdown(
@@ -1180,38 +1243,38 @@ def render_proposal_screen():
     safe_text = proposal_text.replace("\\", "\\\\").replace("`", "\\`").replace("$", "\\$")
 
     # Gentle confirmation banner when arriving at the summary (improves perceived completion)
-    st.success("Proposal generated successfully. Review the details below, then use the copy button to send it to Altamont Group.")
+    st.success("Proposal generated successfully. Review the details below, then copy or download to send to Altamont Group.")
 
     st.markdown('<div class="proposal-container">', unsafe_allow_html=True)
 
     # === Top brand row with logo (more refined) ===
-    logo_col, info_col = st.columns([0.9, 5.2])
+    logo_col, info_col = st.columns([0.85, 5.4])
     with logo_col:
         try:
-            st.image(LOGO_PATH, width=118)
+            st.image(LOGO_PATH, width=112)
         except Exception:
-            st.markdown(f"<span style='font-weight:700; color:{PRIMARY_NAVY}; font-size:1.1rem;'>ALTAMONT</span>", unsafe_allow_html=True)
+            st.markdown(f"<span style='font-weight:700; color:{PRIMARY_NAVY}; font-size:1.08rem;'>ALTAMONT</span>", unsafe_allow_html=True)
     with info_col:
         st.markdown(
             f"""
-            <div style="padding-top:2px;">
-                <span style="font-size:1.42rem; font-weight:700; color:{PRIMARY_NAVY}; letter-spacing:-0.35px;">ALTAMONT GROUP</span><br>
-                <span style="font-size:0.82rem; color:{TEXT_MUTED};">Strategic Advisory for Measurable Impact  •  www.altamontgroup.ca</span>
+            <div style="padding-top:1px;">
+                <span style="font-size:1.44rem; font-weight:700; color:{PRIMARY_NAVY}; letter-spacing:-0.36px;">ALTAMONT GROUP</span><br>
+                <span style="font-size:0.81rem; color:{TEXT_MUTED};">Strategic Advisory for Measurable Impact  •  www.altamontgroup.ca</span>
             </div>
             """,
             unsafe_allow_html=True,
         )
 
-    # Professional proposal header banner
+    # Professional proposal header banner — elevated document header
     st.markdown(
         f"""
         <div class="proposal-banner">
             <div style="display:flex; justify-content:space-between; align-items:flex-start; flex-wrap:wrap; gap:14px;">
                 <div>
-                    <div style="font-size:0.68rem; letter-spacing:2.2px; opacity:0.7; margin-bottom:4px;">CONFIDENTIAL CLIENT PROPOSAL</div>
-                    <div style="font-size:1.78rem; font-weight:700; line-height:1.02; margin-top:1px;">{data['proposal_id']}</div>
+                    <div style="font-size:0.66rem; letter-spacing:2.4px; opacity:0.72; margin-bottom:3px;">CONFIDENTIAL CLIENT PROPOSAL</div>
+                    <div style="font-size:1.82rem; font-weight:700; line-height:1.01; margin-top:1px;">{data['proposal_id']}</div>
                 </div>
-                <div style="text-align:right; font-size:0.84rem; line-height:1.38; opacity:0.92;">
+                <div style="text-align:right; font-size:0.83rem; line-height:1.4; opacity:0.93;">
                     <div>Prepared {data['submitted_at']}</div>
                     <div style="margin-top:1px;">Altamont Group • Professional MERL Advisory</div>
                 </div>
@@ -1221,25 +1284,24 @@ def render_proposal_screen():
         unsafe_allow_html=True,
     )
 
-    # === PRIMARY EMAIL ACTION - The key improvement ===
-    # This panel + button directly addresses "no easy way to send" and the exact requirement.
+    # === PRIMARY EMAIL ACTION — clear, high-priority document action ===
     st.markdown(
         f"""
         <div class="email-action-panel">
-            <div style="font-weight:700; font-size:1.08rem; color:#0f766e; margin-bottom:6px;">
+            <div style="font-weight:700; font-size:1.06rem; color:#0f766e; margin-bottom:5px;">
                 Your proposal is ready to send.
             </div>
             <div class="instruction">
-                <strong>Please paste this into an email and send it to zs@altamontgroup.ca to proceed with your order.</strong><br>
-                We typically respond within one business day with a calendar link for a scoping call.
+                <strong>Click the button below to copy this proposal, then paste it into an email to zs@altamontgroup.ca.</strong><br>
+                We typically respond within one business day with a calendar link for your 30-minute scoping call.
             </div>
         </div>
         """,
         unsafe_allow_html=True,
     )
 
-    # The exact required button - large, primary, unmistakable
-    col_copy, col_dl, col_back = st.columns([2.05, 1.35, 1.25], gap="medium")
+    # Three action buttons — primary copy dominates, others secondary but clear
+    col_copy, col_dl, col_back = st.columns([2.15, 1.3, 1.2], gap="medium")
 
     with col_copy:
         st.markdown(
@@ -1249,9 +1311,9 @@ def render_proposal_screen():
                 navigator.clipboard.writeText(txt).then(() => {{
                     const b = this;
                     const orig = b.innerHTML;
-                    b.innerHTML = '✓ Copied! Now email to zs@altamontgroup.ca';
-                    b.style.background = '#166534';
-                    setTimeout(() => {{ b.innerHTML = orig; b.style.background = ''; }}, 2800);
+                    b.innerHTML = '✓ Copied — now email to zs@altamontgroup.ca';
+                    b.style.background = '#14532d';
+                    setTimeout(() => {{ b.innerHTML = orig; b.style.background = 'linear-gradient(155deg, #166534 0%, #14532d 100%)'; }}, 3200);
                 }}).catch(() => {{
                     alert('Copy failed. Please select the full text below and press Ctrl/Cmd + C.');
                 }});
@@ -1260,26 +1322,26 @@ def render_proposal_screen():
                 background: linear-gradient(155deg, #166534 0%, #14532d 100%);
                 color: white;
                 border: none;
-                border-radius: 16px;
-                padding: 16px 20px;
-                font-size: 1.01rem;
+                border-radius: 15px;
+                padding: 17px 18px;
+                font-size: 0.99rem;
                 font-weight: 700;
                 cursor: pointer;
-                box-shadow: 0 10px 22px -6px rgb(21 128 61 / 0.38);
-                transition: all 0.18s cubic-bezier(0.4, 0, 0.2, 1);
-                letter-spacing: 0.15px;
+                box-shadow: 0 12px 26px -7px rgb(21 128 61 / 0.42);
+                transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+                letter-spacing: 0.18px;
             ">Copy Proposal &amp; Send to Altamont Group</button>
             """,
             unsafe_allow_html=True,
         )
         st.markdown(
-            "<div style='text-align:center; font-size:0.78rem; color:#166534; margin-top:6px; font-weight:500;'>One-click copy • Paste into your email client</div>",
+            "<div style='text-align:center; font-size:0.75rem; color:#166534; margin-top:5px; font-weight:600;'>One-click copy • Paste into your email client</div>",
             unsafe_allow_html=True,
         )
 
     with col_dl:
         st.download_button(
-            label="Download as .txt File",
+            label="Download .txt",
             data=proposal_text,
             file_name=f"{data['proposal_id']}_Altamont_MERL_Proposal.txt",
             mime="text/plain",
@@ -1289,13 +1351,13 @@ def render_proposal_screen():
 
     with col_back:
         if st.button("Edit My Selections", type="secondary", use_container_width=True, help="Return to the configurator to adjust package, add-ons, or details"):
-            # Note: we do NOT clear data so they can come back easily, but for simplicity we allow re-entry to form
             st.session_state.order_submitted = False
             st.rerun()
 
     st.divider()
 
-    # === Two-column clean summary (kept for review before sending) ===
+    # === Two-column clean summary — document-quality review area ===
+    st.markdown('<div style="background:#fafbfc; border:1px solid #e2e8f0; border-radius:18px; padding:22px 24px 18px; margin:6px 0 4px;">', unsafe_allow_html=True)
     left, right = st.columns([1.08, 1], gap="large")
 
     with left:
@@ -1377,6 +1439,8 @@ def render_proposal_screen():
             f"<div style='font-size:0.78rem; color:{TEXT_MUTED}; margin-top:8px;'>This estimate is valid for 30 days. We can adjust scope to match your budget or timeline.</div>",
             unsafe_allow_html=True,
         )
+
+    st.markdown('</div>', unsafe_allow_html=True)  # close document-quality review wrapper
 
     # === Full text for manual review / copy fallback ===
     st.divider()
