@@ -1,8 +1,7 @@
 """
-MERL Order - Module 1 (Improved)
-Professional customer-facing web app for configuring and ordering MERL services.
-Branded for Altamont Group with logo integration and premium UX polish.
-Built with Streamlit.
+MERL Order – Module 1
+Professional proposal configurator for monitoring, evaluation, research and learning services.
+Branded for Altamont Group.
 """
 
 import streamlit as st
@@ -16,15 +15,16 @@ import random
 PAGE_TITLE = "MERL Order | Altamont Group"
 PAGE_ICON = "altamont_logo.png"
 
-# Brand colors (calm, professional consulting palette)
-PRIMARY_BLUE = "#1E3A5F"      # Deep navy blue
-ACCENT_TEAL = "#0F766E"       # Teal / sea green
-LIGHT_TEAL = "#CCFBF1"        # Very light teal bg
-SOFT_GREEN = "#059669"        # Success / selected green
-CARD_BORDER = "#CBD5E1"       # Slate gray for cards
-BG_LIGHT = "#F8FAFC"          # App background
-TEXT_DARK = "#1E293B"         # Main text
-TEXT_MUTED = "#64748B"        # Secondary text
+# Brand colors - Aligned with Altamont Group professional aesthetic
+PRIMARY_NAVY = "#0F172A"          # Deep professional navy
+ACCENT_GREEN = "#166534"          # Deep forest green (close to Altamont logo)
+LIGHT_GREEN = "#DCFCE7"           # Very light green background
+SOFT_GREEN = "#15803D"            # Success / selected green
+CARD_BORDER = "#E2E8F0"           # Clean slate border
+BG_LIGHT = "#F8FAFC"              # App background
+TEXT_DARK = "#0F172A"             # Main text
+TEXT_MUTED = "#475569"            # Secondary text
+ACCENT_GOLD = "#854D0E"           # Subtle accent for premium feel
 
 # Logo path (assumes file is in the same directory as app.py)
 LOGO_PATH = "altamont_logo.png"
@@ -160,11 +160,9 @@ def clear_all_selections():
 
 
 def load_example_order():
-    """Prefill the form with a realistic example order for demo purposes."""
-    # Select a base package
+    """Prefill the form with a realistic, high-quality example order."""
     st.session_state.base_package = "Quick Evaluation Pack"
 
-    # Select 2-3 add-ons
     example_addons = [
         "Advanced Indicator Framework",
         "Data Collection Tools & Templates",
@@ -174,14 +172,14 @@ def load_example_order():
         key = f"cb_{name.replace(' ', '_').replace('&', 'and')}"
         st.session_state[key] = name in example_addons
 
-    # Fill project details
-    st.session_state.proj_name = "USAID Health Resilience Initiative - Phase II"
-    st.session_state.org_name = "Ministry of Health - Republic of Kenya"
-    st.session_state.contact_email = "merl@health.go.ke"
-    st.session_state.sector = "Global Health"
+    # Premium global example
+    st.session_state.proj_name = "Global Climate Resilience Programme – Phase II"
+    st.session_state.org_name = "Green Horizon Foundation"
+    st.session_state.contact_email = "merl@greenhorizon.org"
+    st.session_state.sector = "Climate Change & Environment"
     st.session_state.timeline = "6-12 months"
-    st.session_state.num_indicators = 45
-    st.session_state.notes = "Strong emphasis on gender and youth indicators. Data collection must be feasible in remote counties. Dashboard should integrate with DHIS2."
+    st.session_state.num_indicators = 52
+    st.session_state.notes = "Strong focus on gender-responsive indicators and climate adaptation outcomes. Data systems must align with existing donor reporting frameworks."
 
     st.session_state.submit_error = None
 
@@ -323,8 +321,8 @@ def generate_proposal_text(data):
     lines.append("4. Kickoff meeting upon signed agreement.")
     lines.append("")
     lines.append("=" * 70)
-    lines.append("Thank you for choosing MERL Order.")
-    lines.append("Questions? Contact: orders@merl.example.com (demo)")
+    lines.append("Thank you for your interest in Altamont Group.")
+    lines.append("For questions, please contact your Altamont engagement manager.")
     lines.append("=" * 70)
 
     return "\n".join(lines)
@@ -343,7 +341,7 @@ def inject_custom_css():
         background-color: {BG_LIGHT};
     }}
     h1, h2, h3, h4 {{
-        color: {PRIMARY_BLUE};
+        color: {PRIMARY_NAVY};
         font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
     }}
     .stMarkdown p, .stMarkdown li {{
@@ -352,14 +350,15 @@ def inject_custom_css():
 
     /* Top brand bar */
     .top-bar {{
-        background: linear-gradient(90deg, {PRIMARY_BLUE} 0%, {ACCENT_TEAL} 100%);
-        padding: 12px 24px;
-        border-radius: 8px;
-        margin-bottom: 1.5rem;
+        background: {PRIMARY_NAVY};
+        padding: 14px 24px;
+        border-radius: 0;
+        margin-bottom: 1rem;
         color: white;
         display: flex;
         align-items: center;
         justify-content: space-between;
+        border-bottom: 3px solid {ACCENT_GREEN};
     }}
     .top-bar .brand {{
         font-size: 1.35rem;
@@ -385,7 +384,7 @@ def inject_custom_css():
         font-size: 2.35rem;
         line-height: 1.15;
         margin-bottom: 0.4rem;
-        color: {PRIMARY_BLUE};
+        color: {PRIMARY_NAVY};
     }}
     .hero p {{
         font-size: 1.05rem;
@@ -396,12 +395,12 @@ def inject_custom_css():
 
     /* Section headers */
     .step-header {{
-        font-size: 1.15rem;
+        font-size: 1.1rem;
         font-weight: 600;
-        color: {PRIMARY_BLUE};
-        margin: 1.25rem 0 0.5rem;
-        padding-bottom: 4px;
-        border-bottom: 2px solid {LIGHT_TEAL};
+        color: {PRIMARY_NAVY};
+        margin: 1.1rem 0 0.4rem;
+        padding-bottom: 6px;
+        border-bottom: 2px solid {LIGHT_GREEN};
     }}
 
     /* Package cards - more premium */
@@ -416,7 +415,7 @@ def inject_custom_css():
     }}
     .package-card.selected {{
         border-color: {SOFT_GREEN};
-        background: {LIGHT_TEAL};
+        background: {LIGHT_GREEN};
         box-shadow: 0 6px 16px rgba(5, 150, 105, 0.15);
         transform: translateY(-1px);
     }}
@@ -427,7 +426,7 @@ def inject_custom_css():
     .package-price {{
         font-size: 1.65rem;
         font-weight: 700;
-        color: {ACCENT_TEAL};
+        color: {ACCENT_GREEN};
         margin: 8px 0;
     }}
     .package-card ul {{
@@ -458,7 +457,7 @@ def inject_custom_css():
     .addon-title {{
         font-weight: 600;
         font-size: 0.95rem;
-        color: {PRIMARY_BLUE};
+        color: {PRIMARY_NAVY};
         margin-bottom: 2px;
     }}
     .addon-price {{
@@ -469,7 +468,7 @@ def inject_custom_css():
 
     /* Sidebar summary styling */
     .sidebar-total {{
-        background: {PRIMARY_BLUE};
+        background: {PRIMARY_NAVY};
         color: white;
         padding: 14px 16px;
         border-radius: 10px;
@@ -490,7 +489,7 @@ def inject_custom_css():
 
     /* Proposal / success screen */
     .proposal-header {{
-        background: linear-gradient(90deg, {ACCENT_TEAL} 0%, {SOFT_GREEN} 100%);
+        background: linear-gradient(90deg, {ACCENT_GREEN} 0%, {SOFT_GREEN} 100%);
         color: white;
         padding: 18px 24px;
         border-radius: 14px;
@@ -509,7 +508,7 @@ def inject_custom_css():
     }}
     .next-steps {{
         background: #F0F9FF;
-        border-left: 5px solid {ACCENT_TEAL};
+        border-left: 5px solid {ACCENT_GREEN};
         padding: 14px 18px;
         border-radius: 8px;
         margin: 1rem 0;
@@ -525,8 +524,8 @@ def inject_custom_css():
         font-weight: 600;
     }}
     .stButton > button[kind="primary"] {{
-        background-color: {ACCENT_TEAL};
-        border-color: {ACCENT_TEAL};
+        background-color: {ACCENT_GREEN};
+        border-color: {ACCENT_GREEN};
     }}
     .stButton > button[kind="primary"]:hover {{
         background-color: {SOFT_GREEN};
@@ -546,90 +545,91 @@ def inject_custom_css():
 # ============================================================================
 
 def render_top_bar():
-    """Professional header with Altamont Group branding and logo."""
-    col_logo, col_title = st.columns([0.9, 5.5], vertical_alignment="center")
+    """Premium header with Altamont Group branding."""
+    col1, col2 = st.columns([1.2, 5])
 
-    with col_logo:
+    with col1:
         try:
-            st.image(LOGO_PATH, width=52)
+            st.image(LOGO_PATH, width=68)
         except Exception:
-            st.markdown("**ALTAMONT**")  # fallback
+            st.markdown("**ALTAMONT GROUP**")
 
-    with col_title:
+    with col2:
         st.markdown(
             f"""
-            <div style="display:flex; align-items:center; gap:12px;">
-                <div>
-                    <span style="font-size:1.55rem; font-weight:700; color:{PRIMARY_BLUE}; letter-spacing:-0.4px;">MERL Order</span>
-                    <span style="font-size:0.8rem; color:{TEXT_MUTED}; margin-left:8px;">by Altamont Group</span>
-                </div>
+            <div style="padding-top: 4px;">
+                <span style="font-size: 1.65rem; font-weight: 700; color: {PRIMARY_NAVY}; letter-spacing: -0.5px;">
+                    MERL Order
+                </span><br>
+                <span style="font-size: 0.92rem; color: {TEXT_MUTED}; font-weight: 500;">
+                    by <strong>Altamont Group</strong>
+                </span>
             </div>
             """,
             unsafe_allow_html=True,
         )
 
     st.markdown(
-        f"""
-        <div style="background: linear-gradient(90deg, {PRIMARY_BLUE} 0%, {ACCENT_TEAL} 100%); 
-                    height: 3px; border-radius: 2px; margin: 8px 0 18px 0;"></div>
-        """,
+        f"""<div style="height: 1px; background-color: {CARD_BORDER}; margin: 12px 0 20px 0;"></div>""",
         unsafe_allow_html=True,
     )
 
 
 def render_hero():
-    """Improved professional hero with stronger messaging and demo helper."""
+    """Premium hero section with strong positioning."""
     st.markdown(
         f"""
         <div class="hero">
-            <h1 style="margin-bottom:0.35rem; font-size:2.25rem;">Professional MERL Services,<br>Configured in Minutes</h1>
-            <p style="margin:0 auto 0.8rem; max-width:620px; font-size:1.05rem;">
-                Get a clear, transparent proposal for monitoring, evaluation, research, and learning services 
-                tailored to your program.
+            <h1 style="margin-bottom:0.3rem; font-size:2.4rem; line-height:1.15;">
+                Configure your MERL engagement<br>with clarity and precision.
+            </h1>
+            <p style="margin: 0.4rem auto 0.9rem; max-width: 620px; font-size: 1.08rem; color: {TEXT_MUTED};">
+                Receive a transparent, professionally structured proposal for monitoring, evaluation, 
+                research and learning services — tailored to your program’s objectives.
             </p>
-            <div style="margin-top:0.4rem; font-size:0.9rem; color:#475569;">
-                <strong>Altamont Group</strong> — Delivering high-quality MERL solutions across Africa and beyond
+            <div style="margin-top: 0.3rem; font-size: 0.9rem; color: {TEXT_MUTED};">
+                <strong>Altamont Group</strong> — Strategic advisory for impact-driven organizations
             </div>
         </div>
         """,
         unsafe_allow_html=True,
     )
 
-    # Load Example button - very useful for demos
-    col1, col2, col3 = st.columns([1.5, 2, 1.5])
+    # Prominent Load Example button
+    col1, col2, col3 = st.columns([1.2, 2.2, 1.2])
     with col2:
         if st.button(
-            "🚀 Load Example Order",
+            "📋 Load Example Order",
             type="secondary",
             use_container_width=True,
-            help="Prefills a realistic sample order so you can quickly explore the full experience",
+            help="Load a realistic sample configuration to explore the full ordering experience",
         ):
             load_example_order()
             st.rerun()
 
 
 def render_trust_signals():
-    """Professional trust signals aligned with Altamont Group branding."""
+    """Global, professional trust signals."""
     c1, c2, c3 = st.columns(3)
     with c1:
         st.markdown(
             f"<div style='text-align:center; padding:8px 6px; background:white; border-radius:10px; border:1px solid {CARD_BORDER};'>"
-            "<div style='font-size:1.15rem; font-weight:700; color:#0F766E;'>12+</div>"
-            "<div class='small-muted'>Countries across Africa</div></div>",
+            f"<div style='font-size:1.2rem; font-weight:700; color:{ACCENT_GREEN};'>20+</div>"
+            "<div class='small-muted'>Countries</div></div>",
             unsafe_allow_html=True,
         )
     with c2:
         st.markdown(
             f"<div style='text-align:center; padding:8px 6px; background:white; border-radius:10px; border:1px solid {CARD_BORDER};'>"
-            "<div style='font-size:1.15rem; font-weight:700; color:#0F766E;'>85+</div>"
-            "<div class='small-muted'>MERL projects delivered</div></div>",
+            f"<div style='font-size:1.2rem; font-weight:700; color:{ACCENT_GREEN};'>120+</div>"
+            "<div class='small-muted'>Engagements delivered</div></div>",
             unsafe_allow_html=True,
         )
     with c3:
         st.markdown(
             f"<div style='text-align:center; padding:8px 6px; background:white; border-radius:10px; border:1px solid {CARD_BORDER};'>"
-            "<div style='font-size:1.15rem; font-weight:700; color:#0F766E;'>48hr</div>"
-            "<div class='small-muted'>Average proposal turnaround</div></div>",
+            f"<div style='font-size:1.2rem; font-weight:700; color:{ACCENT_GREEN};'>48hr</div>"
+            "<div class='small-muted'>Proposal turnaround</div></div>",
             unsafe_allow_html=True,
         )
 
@@ -768,10 +768,10 @@ def render_project_details():
 
 
 def render_sidebar_summary():
-    """Live order summary + Submit button (always visible in sidebar)."""
+    """Clean, professional live order summary."""
     with st.sidebar:
-        st.markdown("### 📋 Order Summary")
-        st.caption("Updates live as you configure")
+        st.markdown("### Order Summary")
+        st.caption("Live pricing • Updates automatically")
 
         base = st.session_state.base_package
         addons = get_selected_addons()
@@ -842,7 +842,9 @@ def render_sidebar_summary():
             st.rerun()
 
         st.markdown(
-            "<div class='small-muted' style='margin-top:12px; text-align:center;'>Altamont Group<br>Module 1 — Frontend Demo</div>",
+            "<div class='small-muted' style='margin-top:12px; text-align:center; line-height:1.3;'>"
+            "Altamont Group<br>"
+            "<span style='font-size:0.72rem;'>Module 1 • Frontend Prototype</span></div>",
             unsafe_allow_html=True,
         )
 
@@ -872,7 +874,7 @@ def render_config_interface():
 
 
 def render_proposal_screen():
-    """Clean, professional post-submission proposal summary."""
+    """Premium, client-ready proposal summary."""
     data = st.session_state.proposal_data
     if not data:
         st.error("No proposal data found. Please start a new order.")
@@ -881,26 +883,44 @@ def render_proposal_screen():
             st.rerun()
         return
 
-    # Header with logo
-    col1, col2 = st.columns([1, 6])
-    with col1:
+    # Professional Proposal Header with Logo
+    col_logo, col_info = st.columns([0.8, 5])
+    with col_logo:
         try:
-            st.image(LOGO_PATH, width=48)
+            st.image(LOGO_PATH, width=58)
         except Exception:
-            pass
-    with col2:
+            st.write("**ALTAMONT GROUP**")
+
+    with col_info:
         st.markdown(
             f"""
-            <div class="proposal-header" style="margin-bottom:0; padding:18px 24px;">
-                <div style="font-size:0.85rem; opacity:0.9;">ORDER RECEIVED</div>
-                <h2 style="margin:4px 0 2px;">Proposal {data['proposal_id']}</h2>
-                <div style="font-size:0.9rem;">Generated on {data['submitted_at']}</div>
+            <div style="margin-top: 4px;">
+                <span style="font-size: 1.35rem; font-weight: 700; color: {PRIMARY_NAVY};">ALTAMONT GROUP</span><br>
+                <span style="font-size: 0.85rem; color: {TEXT_MUTED};">Impact Investment & Advisory</span>
             </div>
             """,
             unsafe_allow_html=True,
         )
 
-    st.success("Thank you. Your configuration has been captured. A member of our MERL team will contact you shortly.", icon="📬")
+    st.markdown(
+        f"""
+        <div style="background: {PRIMARY_NAVY}; color: white; padding: 18px 26px; border-radius: 10px; margin: 16px 0 24px;">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <div>
+                    <div style="font-size: 0.8rem; opacity: 0.75; letter-spacing: 1px;">CONFIDENTIAL PROPOSAL</div>
+                    <div style="font-size: 1.55rem; font-weight: 700; margin-top: 2px;">{data['proposal_id']}</div>
+                </div>
+                <div style="text-align: right; font-size: 0.88rem; line-height: 1.4;">
+                    <div>Prepared: {data['submitted_at']}</div>
+                    <div style="margin-top: 2px; opacity: 0.8;">Altamont Group</div>
+                </div>
+            </div>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
+
+    st.success("Thank you. Your requirements have been received. A member of the Altamont Group team will contact you within one business day.", icon="📬")
 
     # Two-column layout: Package + Addons | Scope
     left, right = st.columns([1.05, 1], gap="large")
@@ -987,7 +1007,8 @@ def render_proposal_screen():
             st.rerun()
 
     st.markdown(
-        "<div class='small-muted' style='text-align:center; margin-top:1rem;'>Prepared by <strong>Altamont Group</strong> — Module 1 Frontend Prototype</div>",
+        "<div class='small-muted' style='text-align:center; margin-top:1.2rem;'>"
+        "This document is a confidential proposal prepared by <strong>Altamont Group</strong>.</div>",
         unsafe_allow_html=True,
     )
 
