@@ -1160,23 +1160,24 @@ if st.session_state.get("base_package"):
     addons = get_selected_addons()
     total = calculate_total(base, addons) if base else 0
 
-    save_order_to_sheet({
-        "project_name": st.session_state.get("proj_name", ""),
-        "organization": st.session_state.get("org_name", ""),
-        "email": st.session_state.get("contact_email", ""),
-        "package": base,
-        "addons": ", ".join(addons) if addons else "None",
-        "timeline": st.session_state.get("timeline", ""),
-        "beneficiaries": st.session_state.get("num_beneficiaries", ""),
-        "notes": st.session_state.get("notes", ""),
-        "total_price": total
-    })
+    if st.button("Submit My Request", type="primary", use_container_width=True):
+        save_order_to_sheet({
+            "project_name": st.session_state.get("proj_name", ""),
+            "organization": st.session_state.get("org_name", ""),
+            "email": st.session_state.get("contact_email", ""),
+            "package": base,
+            "addons": ", ".join(addons) if addons else "None",
+            "timeline": st.session_state.get("timeline", ""),
+            "beneficiaries": st.session_state.get("num_beneficiaries", ""),
+            "notes": st.session_state.get("notes", ""),
+            "total_price": total
+        })
 
-    capture_proposal_snapshot()
+         capture_proposal_snapshot()
 
-    if not st.session_state.get("submit_error"):
-        st.session_state.order_submitted = True
-        st.rerun()
+         if not st.session_state.get("submit_error"):
+            st.session_state.order_submitted = True
+            st.rerun()
 
 def render_proposal_screen():
     """Premium, client-ready Proposal Summary screen.
