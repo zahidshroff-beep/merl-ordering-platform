@@ -270,37 +270,34 @@ def validate_order(base_package, details, selected_addons):
         return False, "Please enter a valid work email address (e.g. you@yourorganization.org)."
     return True, None
 
-
 def capture_proposal_snapshot():
-    base = st.session_state.get("base_package")
-    addons = get_selected_addons()
-    total = calculate_total(base, addons) if base else 0
-    details = get_current_form_values()
+    try:
+        base = st.session_state.get("base_package")
+        addons = get_selected_addons()
+        total = calculate_total(base, addons) if base else 0
+        details = get_current_form_values()
 
-    is_valid, error = validate_order(base, details, addons)
-    if not is_valid:
-        st.session_state.submit_error = error
+        is_valid, error = validate_order(base, details, addons)
+        if not is_valid:
+            st.session_state.submit_error = error
+            return False
+
+        proposal_id = f"ALT-{datetime.now().strftime('%Y%m%d')}-{random.randint(10000, 99999)}"
+
+        st.session_state.proposal_data = {
+            "proposal_id": proposal_id,
+            "submitted_at": datetime.now().strftime("%d %b, %Y at %I:%M %p"),
+            "base_package": base,
+            "base_price": PACKAGES[base]["price"] if base else 0,
+            "total": total,
+            "project_name": details.get("project_name", ""),
+            "organization": details.get("organization", ""),
+            "email": details.get("email", ""),
+        }
+        return True
+    except Exception as e:
+        st.session_state.submit_error = f"Error processing request: {str(e)}"
         return False
-
-    proposal_id = f"ALT-{datetime.now().strftime('%Y%m%d')}-{random.randint(10000, 99999)}"
-
-    st.session_state.proposal_data = {
-        "proposal_id": proposal_id,
-        "submitted_at": datetime.now().strftime("%B %d, %Y at %I:%M %p"),
-        "base_package": base,
-        "base_price": PACKAGES[base]["price"],
-        "base_tagline": PACKAGES[base]["tagline"],
-        "base_benefit": PACKAGES[base]["client_benefit"],
-        "base_includes": PACKAGES[base]["includes"],
-        "addons": addons,
-        "addon_prices": {a: ADDONS[a]["price"] for a in addons},
-        "addon_values": {a: ADDONS[a]["client_value"] for a in addons},
-        "total": total,
-        "details": details,
-    }
-    st.session_state.order_submitted = True
-    st.session_state.submit_error = None
-    return True
 
 def generate_proposal_text(data):
     """Professional plain-text proposal for download / email forwarding.
@@ -1158,7 +1155,7 @@ if st.session_state.get("base_package"):
 
     st.markdown("---")
 
-    if st.button("Request My Proposal", type="primary", use_container_width=True):
+    if st.button("Submit My Request", type="primary", use_container_width=True):
         save_order_to_sheet({
             "project_name": st.session_state.get("proj_name", ""),
             "organization": st.session_state.get("org_name", ""),
@@ -1170,18 +1167,12 @@ if st.session_state.get("base_package"):
             "notes": st.session_state.get("notes", ""),
             "total_price": total
         })
-        success = capture_proposal_snapshot()
-        if success:
+        
+        capture_proposal_snapshot()
+
+        if not st.session_state.get("submit_error"):
+            st.session_state.order_submitted = True
             st.rerun()
-
-    if st.session_state.get("submit_error"):
-        st.error(st.session_state.submit_error)
-
-    st.markdown("---")
-
-    if st.button("Start Over — Clear Everything", use_container_width=True, type="secondary"):
-        clear_all_selections()
-        st.rerun()
 
 def render_proposal_screen():
     """Premium, client-ready Proposal Summary screen.
@@ -1448,7 +1439,23 @@ def render_proposal_screen():
 # ============================================================================
 # MAIN
 # ============================================================================
+def render_confirmation_screen():
+    """Clean confirmation screen after client submits request."""
+    st.success("Request Received Successfully")
 
+    st.markdown("### Thank you. Your request has been submitted to Altamont Group.")
+
+    st.markdown("""
+    We have received your MERL request.  
+    Our team will review it and contact you within **1 business day** with next steps.
+    """)
+
+    st.markdown("---")
+
+    if st.button("Submit Another Request", use_container_width=True):
+        clear_all_selections()
+        st.session_state.order_submitted = False
+        st.rerun()
 def main():
     st.set_page_config(
         page_title=PAGE_TITLE,
@@ -1460,10 +1467,11 @@ def main():
     init_session_state()
     inject_custom_css()
 
-    if st.session_state.order_submitted and st.session_state.proposal_data:
-        render_proposal_screen()
+    if st.session_state.order_submitted:
+        render_confirmation_screen()
     else:
         render_config_interface()
 
 if __name__ == "__main__":
-    main()
+  
+ main()
