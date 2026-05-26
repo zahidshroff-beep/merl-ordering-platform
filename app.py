@@ -1,3 +1,14 @@
+import gspread
+from google.oauth2.service_account import Credentials
+from datetime import datetime
+
+# ==================== GOOGLE SHEETS SETUP ====================
+SCOPE = ["https://www.googleapis.com/auth/spreadsheets"]
+CREDS = Credentials.from_service_account_file("credentials.json", scopes=SCOPE)
+client = gspread.authorize(CREDS)
+
+SHEET_NAME = "MERL Orders"
+sheet = client.open(SHEET_NAME).sheet1
 """
 MERL Order — Client-Centric Edition
 Professional, premium proposal configurator for NGOs, foundations, and donor-funded programs.
@@ -1109,16 +1120,23 @@ def render_submit_cta():
     )
     st.markdown("</div>", unsafe_allow_html=True)
 
-    if submitted:
-        success = capture_proposal_snapshot()
-        if success:
-            st.rerun()
-        else:
-            if st.session_state.submit_error:
-                st.error(st.session_state.submit_error)
-                if st.button("Dismiss", key="dismiss_cta_err", use_container_width=True):
-                    st.session_state.submit_error = None
-                    st.rerun()
+if submitted:
+    # Save order to Google Sheet
+    save_order_to_sheet({
+        "project_name": st.session_state.get("project_name", ""),
+        "organization": st.session_state.get("organization", ""),
+        "email": st.session_state.get("email", ""),
+        "package": st.session_state.get("selected_package", ""),
+        "addons": ", ".join(st.session_state.get("selected_addons", [])),
+        "timeline": st.session_state.get("timeline", ""),
+        "beneficiaries": st.session_state.get("beneficiaries", ""),
+        "notes": st.session_state.get("notes", ""),
+        "total_price": st.session_state.get("total_price", "")
+    })
+
+    success = capture_proposal_snapshot()
+    if success:
+        st.rerun()
 
 
 def render_sidebar_summary():
@@ -1510,3 +1528,23 @@ def main():
 
 if __name__ == "__main__":
     main()
+def save_order_to_sheet(data):
+    """Save order to Google Sheet"""
+    try:
+        row = [
+            datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+            data.get("project_name", ""),
+            data.get("organization", ""),
+            data.get("email", ""),
+            data.get("package", ""),
+            data.get("addons", ""),
+            data.get("timeline", ""),
+            data.get("beneficiaries", ""),
+            data.get("notes", ""),
+            data.get("total_price", "")
+        ]
+        sheet.append_row(row)
+        return True
+    except Exception as e:
+        st.error(f"Failed to save order: {e}")
+        return False
