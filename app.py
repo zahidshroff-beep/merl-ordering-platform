@@ -272,10 +272,10 @@ def validate_order(base_package, details, selected_addons):
 
 
 def capture_proposal_snapshot():
-    base = st.session_state.base_package
+    base = st.session_state.get("base_package")
     addons = get_selected_addons()
+    total = calculate_total(base, addons) if base else 0
     details = get_current_form_values()
-    total = calculate_total(base, addons)
 
     is_valid, error = validate_order(base, details, addons)
     if not is_valid:
@@ -1061,6 +1061,7 @@ def render_addon_selection():
                 st.markdown("</div>", unsafe_allow_html=True)
 
 def render_project_details():
+
     """Short, respectful, relevant questions only."""
     st.markdown('<div class="section-header">3. Tell us a little about your project</div>', unsafe_allow_html=True)
     st.caption("This helps us prepare a precise proposal. We only ask what we genuinely need at this stage.")
@@ -1118,73 +1119,6 @@ def render_project_details():
     )
 
 
-def render_sidebar_summary():
-    with st.sidebar:
-        st.markdown("### Your Live Estimate")
-        st.caption("Updates instantly • Transparent pricing")
-
-        base = st.session_state.base_package
-        addons = get_selected_addons()
-        total = calculate_total(base, addons)
-
-        if base:
-            st.markdown(
-                f"""
-                <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:12px; padding:10px 13px; margin:8px 0 6px;">
-                    <div style="font-size:0.75rem; color:#64748b;">BASE PACKAGE</div>
-                    <div style="font-weight:700; color:#0f172a; font-size:0.98rem;">{base}</div>
-                    <div style="color:#0d9488; font-weight:600; font-size:0.9rem;">${PACKAGES[base]['price']:,}</div>
-                </div>
-                """,
-                unsafe_allow_html=True,
-            )
-
-        if addons:
-            st.markdown("**Enhancements:**")
-            for a in addons:
-                st.markdown(f"• {a} <span style='color:#0d9488'>+${ADDONS[a]['price']:,}</span>", unsafe_allow_html=True)
-        else:
-            st.caption("No enhancements selected")
-
-        # Simple & reliable total (no color fighting)
-        st.markdown("### Estimated Total Investment")
-        st.markdown(
-            f"""
-            <div style="background:#f1f5f9; border:1px solid #64748b; padding:16px 20px; border-radius:12px; text-align:center; margin:10px 0;">
-                <div style="font-size:0.8rem; color:#475569;">ONE-TIME PROFESSIONAL FEE</div>
-                <div style="font-size:2.1rem; font-weight:700; color:#0f172a; margin-top:6px;">${total:,} USD</div>
-            </div>
-            """,
-            unsafe_allow_html=True
-        )
-
-        st.caption("Final pricing confirmed after scoping call.")
-
-        if st.button("Request My Proposal", type="primary", use_container_width=True):
-            save_order_to_sheet({
-                "project_name": st.session_state.get("proj_name", ""),
-                "organization": st.session_state.get("org_name", ""),
-                "email": st.session_state.get("contact_email", ""),
-                "package": st.session_state.get("base_package", ""),
-                "addons": ", ".join(get_selected_addons()),
-                "timeline": st.session_state.get("timeline", ""),
-                "beneficiaries": st.session_state.get("num_beneficiaries", ""),
-                "notes": st.session_state.get("notes", ""),
-                "total_price": total
-            })
-
-            success = capture_proposal_snapshot()
-            if success:
-                st.rerun()
-
-        if st.session_state.submit_error:
-            st.error(st.session_state.submit_error)
-
-        st.markdown("---")
-
-        if st.button("Start Over — Clear Everything", use_container_width=True, type="secondary"):
-            clear_all_selections()
-            st.rerun()
 
 def render_config_interface():
     """Main client flow with generous premium spacing."""
@@ -1200,11 +1134,54 @@ def render_config_interface():
 
     render_project_details()
 
-   
-    st.markdown(
-        "<div class='premium-note'>Your selections update live in the sidebar. All information stays private in this browser session.</div>",
-        unsafe_allow_html=True,
-    )
+if st.session_state.get("base_package"):
+    st.markdown("### Your Order Summary")
+
+    base = st.session_state.get("base_package")
+    addons = get_selected_addons()
+    total = calculate_total(base, addons) if base else 0
+
+    if base:
+        st.markdown(f"**Selected Package:** {base} — ${PACKAGES[base]['price']:,}")
+    else:
+        st.info("Please select a package above.")
+
+    if addons:
+        st.markdown("**Selected Enhancements:**")
+        for a in addons:
+            st.markdown(f"- {a} (+${ADDONS[a]['price']:,})")
+    else:
+        st.caption("No enhancements selected.")
+
+    st.markdown(f"### Total Estimated Investment: **${total:,} USD**")
+    st.caption("One-time professional fee. Final pricing confirmed after scoping call.")
+
+    st.markdown("---")
+
+    if st.button("Request My Proposal", type="primary", use_container_width=True):
+        save_order_to_sheet({
+            "project_name": st.session_state.get("proj_name", ""),
+            "organization": st.session_state.get("org_name", ""),
+            "email": st.session_state.get("contact_email", ""),
+            "package": base,
+            "addons": ", ".join(addons),
+            "timeline": st.session_state.get("timeline", ""),
+            "beneficiaries": st.session_state.get("num_beneficiaries", ""),
+            "notes": st.session_state.get("notes", ""),
+            "total_price": total
+        })
+        success = capture_proposal_snapshot()
+        if success:
+            st.rerun()
+
+    if st.session_state.get("submit_error"):
+        st.error(st.session_state.submit_error)
+
+    st.markdown("---")
+
+    if st.button("Start Over — Clear Everything", use_container_width=True, type="secondary"):
+        clear_all_selections()
+        st.rerun()
 
 def render_proposal_screen():
     """Premium, client-ready Proposal Summary screen.
@@ -1248,23 +1225,28 @@ def render_proposal_screen():
         )
 
     # Professional proposal header banner — elevated document header
-    st.markdown(
-        f"""
-        <div class="proposal-banner">
-            <div style="display:flex; justify-content:space-between; align-items:flex-start; flex-wrap:wrap; gap:14px;">
-                <div>
-                    <div style="font-size:0.66rem; letter-spacing:2.4px; opacity:0.72; margin-bottom:3px;">CONFIDENTIAL CLIENT PROPOSAL</div>
-                    <div style="font-size:1.82rem; font-weight:700; line-height:1.01; margin-top:1px;">{data['proposal_id']}</div>
-                </div>
-                <div style="text-align:right; font-size:0.83rem; line-height:1.4; opacity:0.93;">
-                    <div>Prepared {data['submitted_at']}</div>
-                    <div style="margin-top:1px;">Altamont Group • Professional MERL Advisory</div>
-                </div>
-            </div>
+    banner_html = f"""
+<div style="
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 20px 24px;
+    margin: 12px 0 24px 0;
+">
+    <div style="display:flex; justify-content:space-between; align-items:flex-start; flex-wrap:wrap; gap:16px;">
+        <div>
+            <div style="font-size:0.7rem; letter-spacing:1.5px; color:#64748b; margin-bottom:6px;">CONFIDENTIAL CLIENT PROPOSAL</div>
+            <div style="font-size:1.6rem; font-weight:700; color:#0f172a; line-height:1.1;">{data['proposal_id']}</div>
         </div>
-        """,
-        unsafe_allow_html=True,
-    )
+        <div style="text-align:right; font-size:0.85rem; color:#475569; line-height:1.4;">
+            <div>Prepared {data['submitted_at']}</div>
+            <div style="margin-top:2px;">Altamont Group • Professional MERL Advisory</div>
+        </div>
+    </div>
+</div>
+"""
+
+    st.markdown(banner_html, unsafe_allow_html=True)
 
     # === PRIMARY EMAIL ACTION — clear, high-priority document action ===
     st.markdown(
@@ -1482,7 +1464,6 @@ def main():
         render_proposal_screen()
     else:
         render_config_interface()
-        render_sidebar_summary()
 
 if __name__ == "__main__":
     main()
