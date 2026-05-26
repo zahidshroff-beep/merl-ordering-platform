@@ -3,11 +3,14 @@ from google.oauth2.service_account import Credentials
 from datetime import datetime
 
 # ==================== GOOGLE SHEETS SETUP ====================
-SCOPE = ["https://www.googleapis.com/auth/spreadsheets"]
+SCOPE = [
+    "https://www.googleapis.com/auth/spreadsheets",
+    "https://www.googleapis.com/auth/drive"
+]
 CREDS = Credentials.from_service_account_file("credentials.json", scopes=SCOPE)
 client = gspread.authorize(CREDS)
 
-SHEET_NAME = "MERL Orders"
+SHEET_NAME = "MERL Orders - Module 2"
 sheet = client.open(SHEET_NAME).sheet1
 """
 MERL Order — Client-Centric Edition
@@ -219,6 +222,26 @@ def calculate_total(base_package, selected_addons):
         if addon in ADDONS:
             total += ADDONS[addon]["price"]
     return total
+def save_order_to_sheet(data):
+    """Save order to Google Sheet"""
+    try:
+        row = [
+            datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+            data.get("project_name", ""),
+            data.get("organization", ""),
+            data.get("email", ""),
+            data.get("package", ""),
+            data.get("addons", ""),
+            data.get("timeline", ""),
+            data.get("beneficiaries", ""),
+            data.get("notes", ""),
+            data.get("total_price", "")
+        ]
+        sheet.append_row(row)
+        return True
+    except Exception as e:
+        st.error(f"Failed to save order: {e}")
+        return False
 
 def get_current_form_values():
     return {
@@ -1094,53 +1117,7 @@ def render_project_details():
     )
 
 
-def render_submit_cta():
-    """Highly prominent, unmistakable 'Request My Proposal' primary action zone."""
-    st.markdown('<div class="submit-cta">', unsafe_allow_html=True)
-    st.markdown("### Ready to receive your custom proposal?", unsafe_allow_html=True)
-    st.markdown(
-        "Review your selections in the sidebar, then click the button below. We will instantly generate a "
-        "professional, client-ready proposal with exact pricing, scope, and clear next steps.",
-        unsafe_allow_html=True,
-    )
-
-    # Large, centered, high-visibility primary CTA
-    col_l, col_btn, col_r = st.columns([1.2, 3.4, 1.2])
-    with col_btn:
-        submitted = st.button(
-            "Request My Proposal",
-            type="primary",
-            use_container_width=True,
-            help="Validates your selections and generates a detailed professional proposal ready to send to Altamont Group",
-        )
-
-    st.markdown(
-        "<div style='margin-top:15px; font-size:0.81rem; color:#64748b; letter-spacing:-0.01em;'>Private to this session • No commitment until you email the proposal • Typical response within 1 business day</div>",
-        unsafe_allow_html=True,
-    )
-    st.markdown("</div>", unsafe_allow_html=True)
-
-if submitted:
-    # Save order to Google Sheet
-    save_order_to_sheet({
-        "project_name": st.session_state.get("project_name", ""),
-        "organization": st.session_state.get("organization", ""),
-        "email": st.session_state.get("email", ""),
-        "package": st.session_state.get("selected_package", ""),
-        "addons": ", ".join(st.session_state.get("selected_addons", [])),
-        "timeline": st.session_state.get("timeline", ""),
-        "beneficiaries": st.session_state.get("beneficiaries", ""),
-        "notes": st.session_state.get("notes", ""),
-        "total_price": st.session_state.get("total_price", "")
-    })
-
-    success = capture_proposal_snapshot()
-    if success:
-        st.rerun()
-
-
 def render_sidebar_summary():
-    """Cleaner, more professional live Order Summary — executive and trustworthy."""
     with st.sidebar:
         st.markdown("### Your Live Estimate")
         st.caption("Updates instantly • Transparent pricing")
@@ -1148,83 +1125,65 @@ def render_sidebar_summary():
         base = st.session_state.base_package
         addons = get_selected_addons()
         total = calculate_total(base, addons)
-        details = get_current_form_values()
 
-        # Base package
         if base:
             st.markdown(
                 f"""
-                <div style="background:#f8fafc; border:1px solid var(--border); border-radius:12px; padding:10px 13px; margin:8px 0 6px;">
-                    <div style="font-size:0.75rem; color:#64748b; letter-spacing:0.3px;">BASE PACKAGE</div>
-                    <div style="font-weight:700; color:#0f172a; font-size:0.98rem; line-height:1.25; margin:2px 0 1px;">{base}</div>
+                <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:12px; padding:10px 13px; margin:8px 0 6px;">
+                    <div style="font-size:0.75rem; color:#64748b;">BASE PACKAGE</div>
+                    <div style="font-weight:700; color:#0f172a; font-size:0.98rem;">{base}</div>
                     <div style="color:#0d9488; font-weight:600; font-size:0.9rem;">${PACKAGES[base]['price']:,}</div>
                 </div>
                 """,
                 unsafe_allow_html=True,
             )
-        else:
-            st.info("Select a starting package to begin")
 
-        # Enhancements
         if addons:
-            st.markdown("<div style='font-size:0.73rem; color:#64748b; margin:8px 0 3px; letter-spacing:0.4px;'>ENHANCEMENTS</div>", unsafe_allow_html=True)
+            st.markdown("**Enhancements:**")
             for a in addons:
-                st.markdown(f"<div style='font-size:0.86rem; line-height:1.35; margin:1px 0;'>• {a} <span style='color:#0d9488; font-weight:600;'>+${ADDONS[a]['price']:,}</span></div>", unsafe_allow_html=True)
+                st.markdown(f"• {a} <span style='color:#0d9488'>+${ADDONS[a]['price']:,}</span>", unsafe_allow_html=True)
         else:
-            st.markdown("<div style='font-size:0.82rem; color:#94a3b8; margin:4px 0 2px;'>No enhancements selected</div>", unsafe_allow_html=True)
+            st.caption("No enhancements selected")
 
-        # Project context (compact)
-        if details.get("project_name"):
-            short = details['project_name'][:42] + ('…' if len(details['project_name']) > 42 else '')
-            st.markdown(f"<div style='margin-top:8px; font-size:0.81rem; color:#475569;'><strong>Project:</strong> {short}</div>", unsafe_allow_html=True)
-
-        st.markdown("<div style='height:1px; background:#e2e8f0; margin:14px 0 8px;'></div>", unsafe_allow_html=True)
-
-        # Executive total
+        # Simple & reliable total (no color fighting)
+        st.markdown("### Estimated Total Investment")
         st.markdown(
             f"""
-            <div class="sidebar-total">
-                <div class="label">Estimated Total Investment</div>
-                <div class="amount">${total:,}</div>
-                <div style="font-size:0.71rem; opacity:0.78; margin-top:5px; letter-spacing:0.2px;">USD • ONE-TIME PROFESSIONAL FEE</div>
+            <div style="background:#f1f5f9; border:1px solid #64748b; padding:16px 20px; border-radius:12px; text-align:center; margin:10px 0;">
+                <div style="font-size:0.8rem; color:#475569;">ONE-TIME PROFESSIONAL FEE</div>
+                <div style="font-size:2.1rem; font-weight:700; color:#0f172a; margin-top:6px;">${total:,} USD</div>
             </div>
             """,
-            unsafe_allow_html=True,
+            unsafe_allow_html=True
         )
 
-        st.caption("Final pricing confirmed after scoping call. No hidden costs.")
+        st.caption("Final pricing confirmed after scoping call.")
 
-        # Primary action in sidebar (matches main CTA)
-        submitted = st.button(
-            "Request My Proposal",
-            type="primary",
-            use_container_width=True,
-            help="Validates and generates your professional proposal summary",
-        )
+        if st.button("Request My Proposal", type="primary", use_container_width=True):
+            save_order_to_sheet({
+                "project_name": st.session_state.get("proj_name", ""),
+                "organization": st.session_state.get("org_name", ""),
+                "email": st.session_state.get("contact_email", ""),
+                "package": st.session_state.get("base_package", ""),
+                "addons": ", ".join(get_selected_addons()),
+                "timeline": st.session_state.get("timeline", ""),
+                "beneficiaries": st.session_state.get("num_beneficiaries", ""),
+                "notes": st.session_state.get("notes", ""),
+                "total_price": total
+            })
 
-        if submitted:
             success = capture_proposal_snapshot()
             if success:
                 st.rerun()
 
         if st.session_state.submit_error:
             st.error(st.session_state.submit_error)
-            if st.button("Dismiss", key="dismiss_err", use_container_width=True):
-                st.session_state.submit_error = None
-                st.rerun()
 
-        st.markdown("<div style='height:1px; background:#e2e8f0; margin:14px 0 8px;'></div>", unsafe_allow_html=True)
+        st.markdown("---")
 
         if st.button("Start Over — Clear Everything", use_container_width=True, type="secondary"):
             clear_all_selections()
             st.rerun()
-
-        st.markdown(
-            "<div class='small-muted' style='text-align:center; line-height:1.4; margin-top:6px; font-size:0.72rem;'>"
-            "Altamont Group<br>"
-            "<span style='opacity:0.7;'>Boutique • Global reach</span></div>",
-            unsafe_allow_html=True,
-        )
 
 def render_config_interface():
     """Main client flow with generous premium spacing."""
@@ -1240,9 +1199,7 @@ def render_config_interface():
 
     render_project_details()
 
-    # Prominent, clear call-to-action right after the form
-    render_submit_cta()
-
+   
     st.markdown(
         "<div class='premium-note'>Your selections update live in the sidebar. All information stays private in this browser session.</div>",
         unsafe_allow_html=True,
@@ -1528,23 +1485,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-def save_order_to_sheet(data):
-    """Save order to Google Sheet"""
-    try:
-        row = [
-            datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
-            data.get("project_name", ""),
-            data.get("organization", ""),
-            data.get("email", ""),
-            data.get("package", ""),
-            data.get("addons", ""),
-            data.get("timeline", ""),
-            data.get("beneficiaries", ""),
-            data.get("notes", ""),
-            data.get("total_price", "")
-        ]
-        sheet.append_row(row)
-        return True
-    except Exception as e:
-        st.error(f"Failed to save order: {e}")
-        return False
