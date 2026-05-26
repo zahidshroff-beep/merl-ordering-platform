@@ -1,31 +1,32 @@
-import gspread
-from google.oauth2.service_account import Credentials
-from datetime import datetime
-
-# ==================== GOOGLE SHEETS SETUP ====================
-SCOPE = [
-    "https://www.googleapis.com/auth/spreadsheets",
-    "https://www.googleapis.com/auth/drive"
-]
-CREDS = Credentials.from_service_account_file("credentials.json", scopes=SCOPE)
-client = gspread.authorize(CREDS)
-
-SHEET_NAME = "MERL Orders - Module 2"
-sheet = client.open(SHEET_NAME).sheet1
-"""
-MERL Order — Client-Centric Edition
-Professional, premium proposal configurator for NGOs, foundations, and donor-funded programs.
-Branded for Altamont Group. Built from the client's perspective: clarity, convenience, low risk, professionalism.
-"""
 
 import streamlit as st
+import gspread
+from google.oauth2.service_account import Credentials
 from datetime import datetime
 import random
 import html
 
-# ============================================================================
-# CONFIGURATION - All client-facing content and pricing in one place
-# ============================================================================
+# ==================== GOOGLE SHEETS SETUP (Safe for both local + Cloud) ====================
+SCOPE = [
+    "https://www.googleapis.com/auth/spreadsheets",
+    "https://www.googleapis.com/auth/drive"
+]
+
+try:
+    if "gcp_service_account" in st.secrets:
+        creds = Credentials.from_service_account_info(
+            st.secrets["gcp_service_account"], 
+            scopes=SCOPE
+        )
+    else:
+        creds = Credentials.from_service_account_file("credentials.json", scopes=SCOPE)
+except Exception:
+    creds = Credentials.from_service_account_file("credentials.json", scopes=SCOPE)
+
+client = gspread.authorize(creds)
+
+SHEET_NAME = "MERL Orders - Module 2"
+sheet = client.open(SHEET_NAME).sheet1
 
 PAGE_TITLE = "Order MERL Support | Altamont Group"
 PAGE_ICON = "altamont_logo.png"
