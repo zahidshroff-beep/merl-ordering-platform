@@ -858,6 +858,43 @@ def inject_custom_css():
     .stMarkdown, .stTextInput, .stSelectbox, .stNumberInput, .stTextArea {{
         margin-bottom: 0.32rem !important;
     }}
+
+    /* Card icons — final cleanup: centered, consistent sizing/spacing, no blank/white space or cutoff */
+    .pkg-card img, .addon-card img {{
+        display: block !important;
+        width: auto !important;
+        max-width: 100% !important;
+        height: auto !important;
+        object-fit: cover;
+        border: 1px solid #e2e8f0;
+        box-shadow: 0 2px 6px -2px rgb(15 23 42 / 0.07);
+    }}
+    .pkg-card img {{
+        width: 74px !important;
+        height: 74px !important;
+        border-radius: 11px;
+        margin: 0 auto 7px auto;
+    }}
+    .addon-card img {{
+        width: 104px !important;
+        height: 64px !important;
+        border-radius: 8px;
+        margin: 0 auto 5px auto;
+    }}
+
+    /* Streamlit image wrappers inside custom cards (for st.image() calls) */
+    .pkg-card .stImage,
+    .addon-card .stImage {{
+        display: flex !important;
+        justify-content: center !important;
+        margin-bottom: 4px !important;
+    }}
+    .pkg-card .stImage img,
+    .addon-card .stImage img {{
+        border-radius: 11px;
+        border: 1px solid #e2e8f0;
+        box-shadow: 0 2px 6px -2px rgb(15 23 42 / 0.07);
+    }}
     </style>
     """
     st.markdown(css, unsafe_allow_html=True)
@@ -971,7 +1008,15 @@ def render_package_selection():
 
         with cols[i]:
             card_class = "pkg-card selected" if is_selected else "pkg-card"
+            pkg_images = {
+                "Build Your Foundation": "images/package_foundation.jpg",
+                "Demonstrate Results": "images/package_results.jpg",
+                "Turn Data into Decisions": "images/package_decisions.jpg",
+            }
             st.markdown(f'<div class="{card_class}">', unsafe_allow_html=True)
+
+            if name in pkg_images:
+                st.image(pkg_images[name], width=74)
 
             st.markdown(f"<h3>{name}</h3>", unsafe_allow_html=True)
             st.markdown(f"<div class='pkg-tagline'>{info['tagline']}</div>", unsafe_allow_html=True)
@@ -1017,9 +1062,6 @@ def render_addon_selection():
 
             with col:
                 # Fully custom premium card (matches package card quality)
-                st.markdown(f'<div class="addon-card">', unsafe_allow_html=True)
-
-                # Small matching icon for the add-on
                 addon_images = {
                     "Gender, Equity & Inclusion Focus": "images/gesi_focus.jpg",
                     "Donor-Ready Reporting Pack": "images/donor_reporting.jpg",
@@ -1028,8 +1070,10 @@ def render_addon_selection():
                     "Learning Briefs & Knowledge Products": "images/learning_briefs.jpg",
                     "Team Capability Workshop": "images/team_workshop.jpg",
                 }
+                st.markdown(f'<div class="addon-card">', unsafe_allow_html=True)
+
                 if name in addon_images:
-                    st.image(addon_images[name], width=126)  # triple original size
+                    st.image(addon_images[name], width=104)
 
                 st.markdown(f"<div class='addon-title'>{name}</div>", unsafe_allow_html=True)
                 st.markdown(f"<div class='addon-desc'>{info['desc']}</div>", unsafe_allow_html=True)
